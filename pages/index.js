@@ -1,10 +1,13 @@
 import Link from 'next/link'
 import Head from 'next/head'
 import Container from '../Components/container'
+import { useRouter } from "next/router";
+
 
 function HomePage(props) {
     console.log('hello from web app')
-    console.log(window.location.search)
+    const { query } = useRouter();
+    console.log(query.clientId)
     return (
         <>
             <Container>
