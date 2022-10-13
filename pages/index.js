@@ -3,11 +3,14 @@ import Head from 'next/head'
 import Container from '../Components/container'
 import { useRouter } from "next/router";
 
+let clientId;
 
 function HomePage(props) {
     console.log('hello from web app')
     const { query } = useRouter();
-    console.log(query.clientId)
+    clientId = query.clientId
+    console.log(clientId)
+    
     return (
         <>
             <Container>
@@ -23,7 +26,10 @@ function HomePage(props) {
 }
 
 export async function getServerSideProps(context) {
-    const tempId = 'b7db1342-2158-476f-b967-55b6f5aec60d'
+    // const tempId = 'b7db1342-2158-476f-b967-55b6f5aec60d'
+    console.log(`Query: ${context.query.clientId}`)
+    clientId= context.query.clientId
+
     const headers = {
         method: 'GET',
         headers: {
@@ -31,12 +37,12 @@ export async function getServerSideProps(context) {
             "Content-Type": "application/json"
         }
     }
-    const res = await fetch(`https://api-beta.joinportal.com/v1/client/${tempId}`, headers)
+    const res = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, headers)
     const json = await res.json()
     console.log(json)
     return {
-       props: { json }
+        props: { json }
     }
- }
+}
 
 export default HomePage
