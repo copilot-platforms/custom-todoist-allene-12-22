@@ -4,13 +4,14 @@ import Container from '../Components/container'
 
 function HomePage(props) {
     console.log('hello from web app')
+    console.log(props)
     return (
         <>
             <Container>
                 <Head>
                     <title>Example App</title>
                 </Head>
-                <div>Welcome to Next.js!</div>
+                <div>Welcome to a test.</div>
                 <Link href="/spaces/first"><a>First Space</a></Link>
                 <div>Name: {props.json.givenName}</div>
             </Container>
