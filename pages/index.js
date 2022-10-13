@@ -4,7 +4,7 @@ import Container from '../Components/container'
 
 function HomePage(props) {
     console.log('hello from web app')
-    console.log(props)
+    console.log(window.location.search.slice(10))
     return (
         <>
             <Container>
