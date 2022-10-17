@@ -6,9 +6,10 @@ Portal
 Airtable 
 # figure out how to get base from web app dynamically
 
--POST Portal ClientId to AT from web app 
+-POST Portal ClientId to AT School Owner Table from web app
+    -this will be linked to students table to avoid additional calls
     -(look into adding all to airtable via automation and having added outside of web app for new clients)
 
 -GET List Records Students Table filtered by:
-    -WHERE School Owner Portal ID field === Portal ClientId exact match)
+    -WHERE Students.School Owner Portal ID field === Portal ClientId exact match)
 

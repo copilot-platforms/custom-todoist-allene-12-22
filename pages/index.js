@@ -9,8 +9,10 @@ let clientId;
 // -------------Constants-------------------
 
 
-// Portal
-const portalHeaders = {
+// PORTAL API
+
+// HEADERS
+const portalGetReq = {
     method: 'GET',
     headers: {
         "X-API-KEY": process.env.PORTAL_API_KEY,
@@ -18,10 +20,7 @@ const portalHeaders = {
     }
 }
 
-// Airtable
-const airtableGetHeaders = {}
-const airtablePostHeaders = {}
-
+// AIRTABLE API -uses airtable npm
 
 // Regional Base Ids
 const airtableGB_NA_BaseId = 'appVOKLbql3ITyvNZ'
@@ -31,8 +30,8 @@ const airtableGB_NA_BaseId = 'appVOKLbql3ITyvNZ'
 // const airtableGB_C_BaseId = ''
 
 // Global Table Names - table names shared by all bases - called by using base(table_name)
-const airtableGB_StudentsTableName = 'Students'
-const airtableGB_LWPurchasesName = 'LW Purchases'
+const global_airtableGB_StudentsTableName = 'Students'
+// const global_airtableGB_LWPurchasesName = 'LW Purchases'
 
 
 //Tables
@@ -82,33 +81,40 @@ const airtableGB_LWPurchasesName = 'LW Purchases'
 
 
 
-/////Get props////
-
+// -------------Get Props-------------------
 
 export async function getServerSideProps(context) {
-    /////    PORTAL  API   /////
-    //check clientId param
+// -------------PORTAL API-------------------
+    // CHECK PORTAL CLIENT ID FROM PARAMS
     console.log(`Query: ${context.query.clientId}`)
-    //set clientId
+   
+    // SET PORTAL CLIENT ID FROM PARAMS
     // clientId = context.query.clientId
 
-    //fetch portal client id from params
-    // const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalHeaders)
+    // GET CLIENT OBJECT FROM clientId -> PORTAL API
+    // const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
     // const clientData = await clientRes.json()
 
-    //real-prop
+    // PROPS
     // return {
     //     props: { clientData }
     // }
 
-    ///// AIRTABLE API TEST /////
+// -------------AIRTABLE API TEST-------------------
 
     var Airtable = require('airtable');
 
-    // INIT BASE
-    var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appVOKLbql3ITyvNZ');
+    /* DETERMINE BASE 
+    
+        figure this out
+    
+    */
 
-    base('Students').select({
+    // INIT BASE
+    var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(airtableGB_NA_BaseId);
+
+    // List Records
+    base(global_airtableGB_StudentsTableName).select({
         // Selecting the first 3 records in Grid view:
         maxRecords: 3,
         view: "Grid view"
@@ -128,14 +134,15 @@ export async function getServerSideProps(context) {
         if (err) { console.error(err); return; }
     });
 
-    //temp-prop
+    // TEMP PROPS
     return {
         props: { hi: 'hello' }
     }
 }
 
 
-////   App   /////
+// -------------APP-------------------
+
 function HomePage(props) {
     console.log('hello from web app')
     const { query } = useRouter();
