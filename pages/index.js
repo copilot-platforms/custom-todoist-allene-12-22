@@ -8,7 +8,7 @@ let clientId;
 const portalHeaders = {
     method: 'GET',
     headers: {
-        "X-API-KEY": process.env.API_KEY,
+        "X-API-KEY": process.env.PORTAL_API_KEY,
         "Content-Type": "application/json"
     }
 }
