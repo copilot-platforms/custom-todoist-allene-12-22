@@ -106,7 +106,7 @@ export async function getServerSideProps(context) {
 
     /* DETERMINE BASE 
     
-        figure this out
+        figure this out!
     
     */
 
