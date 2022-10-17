@@ -120,31 +120,17 @@ export async function getServerSideProps(context) {
  
     // Find School Owner Record by Name from Portal Client Object to return list of Students.
     // console.log(fullName)
-    // let studentsArr = []
+    let studentsArr = []
 
-    base(global_airtableGB_StudentsTableName).select({
+    const records = await base(global_airtableGB_StudentsTableName).select({
         // Selecting the record with matching full name
         maxRecords: 150,
         view: "Grid view",
         filterByFormula: `{School Owner (from Gracie Barra Location)} = "${fullName}"`
-    }).eachPage(function page(records, fetchNextPage) {
-        // This function (`page`) will get called for each page of records.
-
-        records.forEach(function (record) {
-            console.log('Retrieved', record.fields.Student);
-            // console.log(record.fields.Student.toString())
-            // studentsArr.push(record.fields.Student.toString())
-            // console.log(studentsArr)
-        });
-
-        // To fetch the next page of records, call `fetchNextPage`.
-        // If there are more records, `page` will get called again.
-        // If there are no more records, `done` will get called.
-        fetchNextPage();
-
-    }, function done(err) {
-        if (err) { console.error(err); return; }
-    });
+    }).firstPage()
+    
+    // console.log(records)
+    records.forEach(record => studentsArr.push(record.fields.Student))
     console.log(studentsArr)
 
     // TEMP PROPS
@@ -184,3 +170,25 @@ function HomePage(props) {
 
 
 export default HomePage
+
+
+/* eachPage
+eachPage(function page(records, fetchNextPage) {
+        // This function (`page`) will get called for each page of records.
+
+        records.forEach(function (record) {
+            console.log('Retrieved', record.fields.Student);
+            // console.log(record.fields.Student.toString())
+            // studentsArr.push(record.fields.Student.toString())
+            // console.log(studentsArr)
+        });
+
+        // To fetch the next page of records, call `fetchNextPage`.
+        // If there are more records, `page` will get called again.
+        // If there are no more records, `done` will get called.
+        fetchNextPage();
+
+    }, function done(err) {
+        if (err) { console.error(err); return; }
+    });
+    */
