@@ -4,8 +4,12 @@ import { useRouter } from "next/router";
 
 let clientId;
 
-//Constants
-//Portal
+
+
+// -------------Constants-------------------
+
+
+// Portal
 const portalHeaders = {
     method: 'GET',
     headers: {
@@ -14,26 +18,65 @@ const portalHeaders = {
     }
 }
 
-//Airtable
+// Airtable
 const airtableGetHeaders = {}
 const airtablePostHeaders = {}
 
 
-//Regional Base Ids
+// Regional Base Ids
 const airtableGB_NA_BaseId = 'appVOKLbql3ITyvNZ'
 // const airtableGB_BZ_BaseId = ''
 // const airtableGB_EU_BaseId = ''
 // const airtableGB_W_BaseId = ''
 // const airtableGB_C_BaseId = ''
 
+// Global Table Names - table names shared by all bases - called by using base(table_name)
+const airtableGB_StudentsTableName = 'Students'
+const airtableGB_LWPurchasesName = 'LW Purchases'
 
 
-//Table Ids
-const airtableGB_NA_students_TableId = 'tbl3GeXNPhJ1qfBgR'
-// const airtableGB_BZ_students_TableId = ''
-// const airtableGB_EU_students_TableId = ''
-// const airtableGB_W_students_TableId = ''
-// const airtableGB_C_students_TableId = ''
+//Tables
+    
+  //// LOCATIONS TABLES
+    // const airtableGB_NA_Locs_TableName = ''
+    // const airtableGB_NA_Locs_TableId = ''
+
+    // const airtableGB_BZ_Locs_TableName = ''
+    // const airtableGB_BZ_Locs_TableId = ''
+
+    // const airtableGB_EU_Locs_TableName = ''
+    // const airtableGB_EU_Locs_TableId = ''
+
+    // const airtableGB_W_Locs_TableName = ''
+    // const airtableGB_W_Locs_TableId = ''
+
+    // const airtableGB_C_Locs_TableName = ''
+    // const airtableGB_C_Locs_TableId = ''
+
+
+  //// SCHOOL OWNERS TABLES
+    // const airtableGB_NA_SchOwner_TableName = ''
+    // const airtableGB_NA_SchOwner_TableId = ''
+
+    // const airtableGB_BZ_SchOwner_TableName = ''
+    // const airtableGB_BZ_SchOwner_TableId = ''
+
+    // const airtableGB_EU_SchOwner_TableName = ''
+    // const airtableGB_EU_SchOwner_TableId = ''
+
+    // const airtableGB_W_SchOwner_TableName = ''
+    // const airtableGB_W_SchOwner_TableId = ''
+
+    // const airtableGB_C_SchOwner_TableName = ''
+    // const airtableGB_C_SchOwner_TableId = ''
+
+
+  //// STUDENTS TABLES IDs (use Global Name)
+    const airtableGB_NA_Students_TableId = 'tbl3GeXNPhJ1qfBgR'
+    // const airtableGB_BZ_Students_TableId = ''
+    // const airtableGB_EU_Students_TableId = ''
+    // const airtableGB_W_Students_TableId = ''
+    // const airtableGB_C_Students_TableId = ''
 
 
 
@@ -61,6 +104,8 @@ export async function getServerSideProps(context) {
     ///// AIRTABLE API TEST /////
 
     var Airtable = require('airtable');
+
+    // INIT BASE
     var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appVOKLbql3ITyvNZ');
 
     base('Students').select({
