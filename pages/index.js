@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 let clientId;
 
 //Constants
-    //Portal
+//Portal
 const portalHeaders = {
     method: 'GET',
     headers: {
@@ -14,12 +14,12 @@ const portalHeaders = {
     }
 }
 
-    //Airtable
+//Airtable
 const airtableGetHeaders = {}
 const airtablePostHeaders = {}
 
 
-      //Regional Base Ids
+//Regional Base Ids
 const airtableGB_NA_BaseId = 'appVOKLbql3ITyvNZ'
 // const airtableGB_BZ_BaseId = ''
 // const airtableGB_EU_BaseId = ''
@@ -28,7 +28,7 @@ const airtableGB_NA_BaseId = 'appVOKLbql3ITyvNZ'
 
 
 
-      //Table Ids
+//Table Ids
 const airtableGB_NA_students_TableId = 'tbl3GeXNPhJ1qfBgR'
 // const airtableGB_BZ_students_TableId = ''
 // const airtableGB_EU_students_TableId = ''
@@ -43,18 +43,49 @@ const airtableGB_NA_students_TableId = 'tbl3GeXNPhJ1qfBgR'
 
 
 export async function getServerSideProps(context) {
-    /////    PORTAL  API   //////////// 
+    /////    PORTAL  API   /////
     //check clientId param
     console.log(`Query: ${context.query.clientId}`)
     //set clientId
-    clientId = context.query.clientId
+    // clientId = context.query.clientId
+
     //fetch portal client id from params
-    const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalHeaders)
-    const clientData = await clientRes.json()
+    // const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalHeaders)
+    // const clientData = await clientRes.json()
 
+    //real-prop
+    // return {
+    //     props: { clientData }
+    // }
 
+    ///// AIRTABLE API TEST /////
+
+    var Airtable = require('airtable');
+    var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appVOKLbql3ITyvNZ');
+
+    base('Students').select({
+        // Selecting the first 3 records in Grid view:
+        maxRecords: 3,
+        view: "Grid view"
+    }).eachPage(function page(records, fetchNextPage) {
+        // This function (`page`) will get called for each page of records.
+
+        records.forEach(function (record) {
+            console.log('Retrieved', record.get('Student'));
+        });
+
+        // To fetch the next page of records, call `fetchNextPage`.
+        // If there are more records, `page` will get called again.
+        // If there are no more records, `done` will get called.
+        fetchNextPage();
+
+    }, function done(err) {
+        if (err) { console.error(err); return; }
+    });
+
+    //temp-prop
     return {
-        props: { clientData }
+        props: { hi: 'hello' }
     }
 }
 
@@ -73,7 +104,8 @@ function HomePage(props) {
                     <title>Example App</title>
                 </Head>
                 <div>Gracie Barra Location</div>
-                <div>School Owner: {props.clientData.givenName} {props.clientData.familyName} </div>
+                <div>Prop: {props.hi} </div>
+                {/* <div>School Owner: {props.clientData.givenName} {props.clientData.familyName} </div> */}
             </Container>
         </>
     )
