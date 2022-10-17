@@ -54,8 +54,9 @@ const global_airtableGB_StudentsTableName = 'Students'
 
 
   //// SCHOOL OWNERS TABLES
-    // const airtableGB_NA_SchOwner_TableName = ''
+    const airtableGB_NA_SchOwner_TableName = 'GB Na School Owners'
     // const airtableGB_NA_SchOwner_TableId = ''
+    const airtableGB_NA_SchOwner_portalClientIdField = 'fld4yDXdQIs4ehiOZ'
 
     // const airtableGB_BZ_SchOwner_TableName = ''
     // const airtableGB_BZ_SchOwner_TableId = ''
@@ -81,7 +82,7 @@ const global_airtableGB_StudentsTableName = 'Students'
 
 
 
-// -------------Get Props-------------------
+// -------------Server: Get Props-------------------
 
 export async function getServerSideProps(context) {
 // -------------PORTAL API-------------------
@@ -90,10 +91,14 @@ export async function getServerSideProps(context) {
    
     // SET PORTAL CLIENT ID FROM PARAMS
     // clientId = context.query.clientId
+    // SET TEMP ID
+    clientId = 'b7db1342-2158-476f-b967-55b6f5aec60d'
 
     // GET CLIENT OBJECT FROM clientId -> PORTAL API
-    // const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
-    // const clientData = await clientRes.json()
+    const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
+    const clientData = await clientRes.json()
+    const fullName = `${clientData.givenName} ${clientData.familyName}`
+
 
     // PROPS
     // return {
@@ -110,19 +115,26 @@ export async function getServerSideProps(context) {
     
     */
 
-    // INIT BASE
+    // INIT BASE + schoolOwnerRecordId
     var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(airtableGB_NA_BaseId);
+ 
+    // Find School Owner Record by Name from Portal Client Object to return list of Students.
+    // console.log(fullName)
+    // let studentsArr = []
 
-    // List Records
     base(global_airtableGB_StudentsTableName).select({
-        // Selecting the first 3 records in Grid view:
-        maxRecords: 3,
-        view: "Grid view"
+        // Selecting the record with matching full name
+        maxRecords: 150,
+        view: "Grid view",
+        filterByFormula: `{School Owner (from Gracie Barra Location)} = "${fullName}"`
     }).eachPage(function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
 
         records.forEach(function (record) {
-            console.log('Retrieved', record.get('Student'));
+            console.log('Retrieved', record.fields.Student);
+            // console.log(record.fields.Student.toString())
+            // studentsArr.push(record.fields.Student.toString())
+            // console.log(studentsArr)
         });
 
         // To fetch the next page of records, call `fetchNextPage`.
@@ -133,6 +145,7 @@ export async function getServerSideProps(context) {
     }, function done(err) {
         if (err) { console.error(err); return; }
     });
+    console.log(studentsArr)
 
     // TEMP PROPS
     return {
