@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 
 let clientId;
 
-////Headers////
+//Constants
+    //Portal
 const portalHeaders = {
     method: 'GET',
     headers: {
@@ -12,6 +13,30 @@ const portalHeaders = {
         "Content-Type": "application/json"
     }
 }
+
+    //Airtable
+const airtableGetHeaders = {}
+const airtablePostHeaders = {}
+
+
+      //Regional Base Ids
+const airtableGB_NA_BaseId = 'appVOKLbql3ITyvNZ'
+// const airtableGB_BZ_BaseId = ''
+// const airtableGB_EU_BaseId = ''
+// const airtableGB_W_BaseId = ''
+// const airtableGB_C_BaseId = ''
+
+
+
+      //Table Ids
+const airtableGB_NA_students_TableId = 'tbl3GeXNPhJ1qfBgR'
+// const airtableGB_BZ_students_TableId = ''
+// const airtableGB_EU_students_TableId = ''
+// const airtableGB_W_students_TableId = ''
+// const airtableGB_C_students_TableId = ''
+
+
+
 
 
 /////Get props////
