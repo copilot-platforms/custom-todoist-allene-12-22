@@ -135,7 +135,10 @@ export async function getServerSideProps(context) {
 
     // TEMP PROPS
     return {
-        props: { hi: 'hello' }
+        props: { 
+            clientName: fullName,
+            allStudents: studentsArr
+         }
     }
 }
 
@@ -147,6 +150,7 @@ function HomePage(props) {
     const { query } = useRouter();
     clientId = query.clientId
     console.log(`Current clientId: ${clientId}`)
+    console.log(props.allStudents)
 
     return (
         <>
@@ -155,11 +159,7 @@ function HomePage(props) {
                     <title>Example App</title>
                 </Head>
                 <div>Gracie Barra Location</div>
-                {/* {'temp-prop-disp'} */}
-                <div>Prop: {props.hi} </div>
-
-                 {/* {'real-prop-disp'} */}
-                {/* <div>School Owner: {props.clientData.givenName} {props.clientData.familyName} </div> */}
+                <div>School Owner: {props.clientName} </div>
             </Container>
         </>
     )
