@@ -90,9 +90,9 @@ export async function getServerSideProps(context) {
     console.log(`Query: ${context.query.clientId}`)
    
     // SET PORTAL CLIENT ID FROM PARAMS
-    // clientId = context.query.clientId
+    clientId = context.query.clientId
     // SET TEMP ID
-    clientId = 'b7db1342-2158-476f-b967-55b6f5aec60d'
+    // clientId = 'b7db1342-2158-476f-b967-55b6f5aec60d'
 
     // GET CLIENT OBJECT FROM clientId -> PORTAL API
     const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
