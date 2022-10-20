@@ -149,14 +149,15 @@ export async function getServerSideProps(context) {
 // -------------APP-------------------
 
 function HomePage(props) {
-    console.log('hello from web app')
+    // console.log('hello from web app')
     const { query } = useRouter();
     clientId = query.clientId
-    console.log(`Current clientId: ${clientId}`)
-    // console.log(props.allStudents)
+    // console.log(`Current clientId: ${clientId}`)
+    console.log(props.allStudents)
 
 
     const [selected, setSelected] = useState('')
+    console.log('Selected: ' + selected)
 
     return (
         <>
@@ -168,10 +169,9 @@ function HomePage(props) {
                 <div>School Owner: {props.clientName} </div>
                 <div>Select Student:
                     <select onChange={e =>{ 
-                        setSelected(e.target.value) 
-                        console.log(selected)}}>
+                        setSelected(e.target.value) }}>
                         <option value="select student">Select Student</option>
-                        {props.allStudents.map((student) => <option value={student.recordId}>{student.name}</option>)}
+                        {props.allStudents.map((student) => <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
                     </select>
                 </div>
             </Container>
