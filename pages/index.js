@@ -184,25 +184,3 @@ function HomePage(props) {
 
 
 export default HomePage
-
-
-/* eachPage
-eachPage(function page(records, fetchNextPage) {
-        // This function (`page`) will get called for each page of records.
-
-        records.forEach(function (record) {
-            console.log('Retrieved', record.fields.Student);
-            // console.log(record.fields.Student.toString())
-            // studentsArr.push(record.fields.Student.toString())
-            // console.log(studentsArr)
-        });
-
-        // To fetch the next page of records, call `fetchNextPage`.
-        // If there are more records, `page` will get called again.
-        // If there are no more records, `done` will get called.
-        fetchNextPage();
-
-    }, function done(err) {
-        if (err) { console.error(err); return; }
-    });
-    */
