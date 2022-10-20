@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Container from '../Components/container'
 import { useRouter } from "next/router";
-
+import {useState} from 'react'
 let clientId;
 
 
@@ -153,7 +153,10 @@ function HomePage(props) {
     const { query } = useRouter();
     clientId = query.clientId
     console.log(`Current clientId: ${clientId}`)
-    console.log(props.allStudents)
+    // console.log(props.allStudents)
+
+
+    const [selected, setSelected] = useState('')
 
     return (
         <>
@@ -164,7 +167,9 @@ function HomePage(props) {
                 <div>Gracie Barra Location</div>
                 <div>School Owner: {props.clientName} </div>
                 <div>Select Student:
-                    <select>
+                    <select onChange={e =>{ 
+                        setSelected(e.target.value) 
+                        console.log(selected)}}>
                         <option value="select student">Select Student</option>
                         {props.allStudents.map((student) => <option value={student.recordId}>{student.name}</option>)}
                     </select>
