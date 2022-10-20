@@ -2,6 +2,10 @@ import Head from 'next/head'
 import Container from '../Components/container'
 import { useRouter } from "next/router";
 import {useState} from 'react'
+
+import {gbBase, gbTable} from './utils/constants'
+
+
 let clientId;
 
 
@@ -19,15 +23,6 @@ const portalGetReq = {
         "Content-Type": "application/json"
     }
 }
-
-// AIRTABLE API -uses airtable npm
-
-// Regional Base Ids
-const airtableGB_NA_BaseId = 'appVOKLbql3ITyvNZ'
-// const airtableGB_BZ_BaseId = ''
-// const airtableGB_EU_BaseId = ''
-// const airtableGB_W_BaseId = ''
-// const airtableGB_C_BaseId = ''
 
 // Global Table Names - table names shared by all bases - called by using base(table_name)
 const global_airtableGB_StudentsTableName = 'Students'
@@ -116,13 +111,13 @@ export async function getServerSideProps(context) {
     */
 
     // INIT BASE + schoolOwnerRecordId
-    var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(airtableGB_NA_BaseId);
+    var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.naBaseId);
  
     // Find School Owner Record by Name from Portal Client Object to return list of Students.
     // console.log(fullName)
     let studentsArr = []
 
-    const records = await base(global_airtableGB_StudentsTableName).select({
+    const records = await base(gbTable.students.tableName).select({
         // Selecting the record with matching full name
         maxRecords: 150,
         view: "Grid view",
