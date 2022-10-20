@@ -131,8 +131,8 @@ export async function getServerSideProps(context) {
     
     // console.log(records)
     records.forEach(record => studentsArr.push({
-        student: record.fields.Student,
-        studentRecordId: record.id
+        name: record.fields.Student,
+        recordId: record.id
     }))
     // console.log(studentsArr)
 
@@ -163,6 +163,12 @@ function HomePage(props) {
                 </Head>
                 <div>Gracie Barra Location</div>
                 <div>School Owner: {props.clientName} </div>
+                <div>Select Student:
+                    <select>
+                        <option value="select student">Select Student</option>
+                        {props.allStudents.map((student) => <option value={student.recordId}>{student.name}</option>)}
+                    </select>
+                </div>
             </Container>
         </>
     )
