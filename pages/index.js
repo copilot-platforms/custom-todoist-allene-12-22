@@ -130,8 +130,11 @@ export async function getServerSideProps(context) {
     }).firstPage()
     
     // console.log(records)
-    records.forEach(record => studentsArr.push(record.fields.Student))
-    console.log(studentsArr)
+    records.forEach(record => studentsArr.push({
+        student: record.fields.Student,
+        studentRecordId: record.id
+    }))
+    // console.log(studentsArr)
 
     // TEMP PROPS
     return {
