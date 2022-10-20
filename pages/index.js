@@ -168,10 +168,10 @@ function HomePage(props) {
                 <div>Gracie Barra Location</div>
                 <div>School Owner: {props.clientName} </div>
                 <div>Select Student:
-                    <select onChange={e =>{ 
-                        setSelected(e.target.value) }}>
+                    <select onChange={e =>{ setSelected(e.target.value) }}>
                         <option value="select student">Select Student</option>
-                        {props.allStudents.map((student) => <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
+                        {props.allStudents.map((student) => 
+                            <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
                     </select>
                 </div>
             </Container>
