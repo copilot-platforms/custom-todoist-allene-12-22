@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Container from '../Components/container'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import { getStudents, updateBeltRank } from '../utils/airtable'
 
@@ -89,6 +90,8 @@ function HomePage(props) {
     // log all students
     //   console.log(props.allStudents)
 
+    const router = useRouter()
+
 
     const [selected, setSelected] = useState('')
     console.log('Selected: ' + selected)
@@ -107,10 +110,11 @@ function HomePage(props) {
     }, [selected]);
 
 
-    
+
 
     const handleUpdateRank = async function (id, verified) {
         updateBeltRank(id, verified).then(res => setIsVerified(res))
+        router.replace(router.asPath);
     }
 
 
