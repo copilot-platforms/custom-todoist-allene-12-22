@@ -17,7 +17,7 @@ export const gbTable = {
     // },
     locations: {
         na: {
-            name: '',
+            name: 'GB NA Locations',
             id: ''
         },
         brazil: {},

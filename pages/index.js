@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { getStudents, updateBeltRank } from '../utils/airtable'
+import { getStudents, updateBeltRank, getLocation } from '../utils/airtable'
 
 
 let clientId;
@@ -68,6 +68,7 @@ export async function getServerSideProps(context) {
     // console.log(studentsArr)
 
     const allStudents = await getStudents(fullName)
+    const location = await getLocation(fullName)
 
     // TEMP PROPS
     return {
@@ -95,7 +96,7 @@ function HomePage(props) {
 
     const [selected, setSelected] = useState('')
     console.log('Selected: ' + selected)
-    const [rank, setRank] = useState('None')
+    const [rank, setRank] = useState('')
     console.log('Rank: ' + rank)
     const [isVerified, setIsVerified] = useState('')
 
@@ -106,7 +107,7 @@ function HomePage(props) {
             console.log(studentRecord[0])
             setRank(studentRecord[0].rank)
             setIsVerified(studentRecord[0].isVerified)
-        } else if (selected === 'select student') { setRank('None') }
+        } else if (selected === 'select student') { setRank('') }
     }, [selected]);
 
 
@@ -124,19 +125,18 @@ function HomePage(props) {
                 <Head>
                     <title>Example App</title>
                 </Head>
-                <div>Gracie Barra Location</div>
-                <div>School Owner: {props.clientName} </div>
-                <div>Select Student:
-                    <select onChange={e => { setSelected(e.target.value) }}>
+                <div className='header'><h1>{props.clientName}</h1></div>
+                <div className='row'>Select Student:
+                    <select className="input" onChange={e => { setSelected(e.target.value) }}>
                         <option value="select student">Select Student</option>
                         {props.allStudents.map((student) =>
                             <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
                     </select>
                 </div>
-                <div>Selected student current rank: {rank}</div>
-                <div>Selected student is verified? {isVerified}</div>
+                <div className='row'>Current rank: <span className='input'>{rank}</span></div>
+                <div className='row'>Verified: <span className='input'>{isVerified}</span></div>
                 {isVerified === 'No' ?
-                    <div>
+                    <div className='row'>
                         <button onClick={e => handleUpdateRank(selected, "Yes")}>Verify</button>
                     </div>
                     : null}

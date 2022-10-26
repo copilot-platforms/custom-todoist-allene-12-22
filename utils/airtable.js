@@ -6,9 +6,39 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.
 
 // init tables
 const studentsTable = base(gbTable.students.tableName)
+const locsTable = base(gbTable.locations.na.name)
+
+/* 
+    Locations Functions
+*/
+
+const getLocation = async function (clientName) {
+
+    const records = await locsTable.select({
+        // Selecting the record with matching full name
+        maxRecords: 150,
+        view: "Grid view",
+        filterByFormula: `{School Owner} = "${clientName}"`
+    }).firstPage()
+
+
+    // console.log(records)
+    // records.forEach(record => console.log(record.fields['Belt Rank']))
+    records.forEach((record) => {
+        console.log(record.fields['School Name'])
+    })
+
+}
+
+
+
+
+
+/* 
+    Students Functions
+*/
 
 // get all students and map fields
-
 const getStudents = async function (clientName) {
     let studentsArr = []
 
@@ -51,4 +81,4 @@ const updateBeltRank = async function (id, verified) {
         return updateVerified
 }
 
-export { getStudents, updateBeltRank }
+export { getStudents, updateBeltRank, getLocation }
