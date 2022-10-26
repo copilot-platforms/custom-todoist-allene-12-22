@@ -9,7 +9,7 @@ const studentsTable = base(gbTable.students.tableName)
 
 // get all students and map fields
 
-const getStudents =  async function (clientName) {
+const getStudents = async function (clientName) {
     let studentsArr = []
 
     const records = await studentsTable.select({
@@ -24,7 +24,7 @@ const getStudents =  async function (clientName) {
     // records.forEach(record => console.log(record.fields['Belt Rank']))
     records.forEach((record) => {
         let currentRank = 'None'
-        if (record.fields['Belt Rank']) {currentRank = record.fields['Belt Rank']}
+        if (record.fields['Belt Rank']) { currentRank = record.fields['Belt Rank'] }
         studentsArr.push({
             name: record.fields.Student,
             recordId: record.id,
@@ -35,8 +35,15 @@ const getStudents =  async function (clientName) {
     return studentsArr
 }
 
-const updateBeltRank = async function () {
-    await console.log('hi')
+const updateBeltRank = async function (id, verified) {
+    console.log('hi')
+    await studentsTable.update([
+        {
+            "id": id,
+            "fields": {
+                "Belt Rank Verified": verified,
+            }
+        }])
 }
 
-export {getStudents, updateBeltRank}
+export { getStudents, updateBeltRank }

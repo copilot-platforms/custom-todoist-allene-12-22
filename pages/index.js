@@ -120,6 +120,9 @@ function HomePage(props) {
                     </select>
                 </div>
                 <div>Selected student rank: {rank}</div>
+                <div>
+                    <button onClick={ e => updateBeltRank(selected, "Yes")}>Verify</button>
+                </div>
             </Container>
         </>
     )
