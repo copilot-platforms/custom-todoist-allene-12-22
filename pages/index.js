@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 
-import { getStudents } from '../utils/airtable'
+import { getStudents, updateBeltRank } from '../utils/airtable'
 
 
 let clientId;

@@ -9,7 +9,7 @@ const studentsTable = base(gbTable.students.tableName)
 
 // get all students and map fields
 
-export async function getStudents(clientName) {
+const getStudents =  async function (clientName) {
     let studentsArr = []
 
     const records = await studentsTable.select({
@@ -34,3 +34,9 @@ export async function getStudents(clientName) {
 
     return studentsArr
 }
+
+const updateBeltRank = async function () {
+    await console.log('hi')
+}
+
+export {getStudents, updateBeltRank}
