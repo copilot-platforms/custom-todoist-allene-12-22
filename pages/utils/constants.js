@@ -27,8 +27,8 @@ export const gbTable = {
     },
     schoolOwners: {
         na: {
-            name: 'GB NA School Owners',
-            id: ''
+            tableName: 'GB NA School Owners',
+            tableId: ''
         },
         brazil: {},
         eu: {},
@@ -37,11 +37,11 @@ export const gbTable = {
     },
     students: {
         tableName: 'Students',
-        naId: 'tbl3GeXNPhJ1qfBgR',
-        brazilId: '',
-        euId: '',
-        worldId: '',
-        centralId: ''
+        naTableId: 'tbl3GeXNPhJ1qfBgR',
+        brazilTableId: '',
+        euTableId: '',
+        worldTableId: '',
+        centralTableId: ''
     }
 }
 
