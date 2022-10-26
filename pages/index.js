@@ -9,12 +9,6 @@ import {gbBase, gbTable} from './utils/constants'
 let clientId;
 
 
-
-// -------------Constants-------------------
-
-
-// PORTAL API
-
 // HEADERS
 const portalGetReq = {
     method: 'GET',
@@ -23,58 +17,6 @@ const portalGetReq = {
         "Content-Type": "application/json"
     }
 }
-
-// Global Table Names - table names shared by all bases - called by using base(table_name)
-const global_airtableGB_StudentsTableName = 'Students'
-// const global_airtableGB_LWPurchasesName = 'LW Purchases'
-
-
-//Tables
-    
-  //// LOCATIONS TABLES
-    // const airtableGB_NA_Locs_TableName = ''
-    // const airtableGB_NA_Locs_TableId = ''
-
-    // const airtableGB_BZ_Locs_TableName = ''
-    // const airtableGB_BZ_Locs_TableId = ''
-
-    // const airtableGB_EU_Locs_TableName = ''
-    // const airtableGB_EU_Locs_TableId = ''
-
-    // const airtableGB_W_Locs_TableName = ''
-    // const airtableGB_W_Locs_TableId = ''
-
-    // const airtableGB_C_Locs_TableName = ''
-    // const airtableGB_C_Locs_TableId = ''
-
-
-  //// SCHOOL OWNERS TABLES
-    const airtableGB_NA_SchOwner_TableName = 'GB Na School Owners'
-    // const airtableGB_NA_SchOwner_TableId = ''
-    const airtableGB_NA_SchOwner_portalClientIdField = 'fld4yDXdQIs4ehiOZ'
-
-    // const airtableGB_BZ_SchOwner_TableName = ''
-    // const airtableGB_BZ_SchOwner_TableId = ''
-
-    // const airtableGB_EU_SchOwner_TableName = ''
-    // const airtableGB_EU_SchOwner_TableId = ''
-
-    // const airtableGB_W_SchOwner_TableName = ''
-    // const airtableGB_W_SchOwner_TableId = ''
-
-    // const airtableGB_C_SchOwner_TableName = ''
-    // const airtableGB_C_SchOwner_TableId = ''
-
-
-  //// STUDENTS TABLES IDs (use Global Name)
-    const airtableGB_NA_Students_TableId = 'tbl3GeXNPhJ1qfBgR'
-    // const airtableGB_BZ_Students_TableId = ''
-    // const airtableGB_EU_Students_TableId = ''
-    // const airtableGB_W_Students_TableId = ''
-    // const airtableGB_C_Students_TableId = ''
-
-
-
 
 
 // -------------Server: Get Props-------------------
@@ -95,11 +37,6 @@ export async function getServerSideProps(context) {
     const fullName = `${clientData.givenName} ${clientData.familyName}`
 
 
-    // PROPS
-    // return {
-    //     props: { clientData }
-    // }
-
 // -------------AIRTABLE API TEST-------------------
 
     var Airtable = require('airtable');
@@ -114,7 +51,6 @@ export async function getServerSideProps(context) {
     var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.naBaseId);
  
     // Find School Owner Record by Name from Portal Client Object to return list of Students.
-    // console.log(fullName)
     let studentsArr = []
 
     const records = await base(gbTable.students.tableName).select({
@@ -144,11 +80,13 @@ export async function getServerSideProps(context) {
 // -------------APP-------------------
 
 function HomePage(props) {
-    // console.log('hello from web app')
-    const { query } = useRouter();
-    clientId = query.clientId
-    // console.log(`Current clientId: ${clientId}`)
-    console.log(props.allStudents)
+    // log clientId on FE
+      // const { query } = useRouter();
+      // clientId = query.clientId
+      // console.log(`Current clientId: ${clientId}`)
+      
+    // log all students
+      // console.log(props.allStudents)
 
 
     const [selected, setSelected] = useState('')
