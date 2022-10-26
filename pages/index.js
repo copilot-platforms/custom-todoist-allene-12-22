@@ -1,9 +1,6 @@
 import Head from 'next/head'
 import Container from '../Components/container'
-import { useRouter } from "next/router";
 import {useState} from 'react'
-
-import {gbBase, gbTable} from './utils/constants'
 
 import {getStudents} from './utils/airtable'
 
