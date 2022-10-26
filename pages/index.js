@@ -96,11 +96,11 @@ function HomePage(props) {
     console.log('Rank: ' + rank)
 
     useEffect(() => {
-        if (selected !== '') {
+        if (selected !== '' && selected !== 'select student') {
             let studentRecord = props.allStudents.filter(student => student.recordId === selected)
             console.log(studentRecord[0])
             setRank(studentRecord[0].rank)
-        }
+        } else if (selected === 'select student') {setRank('None')}
     }, [selected]);
 
 
