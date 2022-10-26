@@ -94,14 +94,24 @@ function HomePage(props) {
     console.log('Selected: ' + selected)
     const [rank, setRank] = useState('None')
     console.log('Rank: ' + rank)
+    const [isVerified, setIsVerified] = useState('')
+
 
     useEffect(() => {
         if (selected !== '' && selected !== 'select student') {
             let studentRecord = props.allStudents.filter(student => student.recordId === selected)
             console.log(studentRecord[0])
             setRank(studentRecord[0].rank)
-        } else if (selected === 'select student') {setRank('None')}
+            setIsVerified(studentRecord[0].isVerified)
+        } else if (selected === 'select student') { setRank('None') }
     }, [selected]);
+
+
+    
+
+    const handleUpdateRank = async function (id, verified) {
+        updateBeltRank(id, verified).then(res => setIsVerified(res))
+    }
 
 
     return (
@@ -119,10 +129,14 @@ function HomePage(props) {
                             <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
                     </select>
                 </div>
-                <div>Selected student rank: {rank}</div>
-                <div>
-                    <button onClick={ e => updateBeltRank(selected, "Yes")}>Verify</button>
-                </div>
+                <div>Selected student current rank: {rank}</div>
+                <div>Selected student is verified? {isVerified}</div>
+                {isVerified === 'No' ?
+                    <div>
+                        <button onClick={e => handleUpdateRank(selected, "Yes")}>Verify</button>
+                    </div>
+                    : null}
+
             </Container>
         </>
     )
