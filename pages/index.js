@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import Container from '../Components/container'
-import {useState} from 'react'
+import { useState, useEffect } from 'react'
 
-import {getStudents} from './utils/airtable'
+import { getStudents } from './utils/airtable'
 
 
 let clientId;
@@ -21,10 +21,10 @@ const portalGetReq = {
 // -------------Server: Get Props-------------------
 
 export async function getServerSideProps(context) {
-// -------------PORTAL API-------------------
+    // -------------PORTAL API-------------------
     // CHECK PORTAL CLIENT ID FROM PARAMS
     console.log(`Query: ${context.query.clientId}`)
-   
+
     // SET PORTAL CLIENT ID FROM PARAMS
     clientId = context.query.clientId
     // SET TEMP ID
@@ -36,7 +36,7 @@ export async function getServerSideProps(context) {
     const fullName = `${clientData.givenName} ${clientData.familyName}`
 
 
-// -------------AIRTABLE API TEST-------------------
+    // -------------AIRTABLE API TEST-------------------
 
     // var Airtable = require('airtable');
 
@@ -48,7 +48,7 @@ export async function getServerSideProps(context) {
 
     // INIT BASE + schoolOwnerRecordId
     // var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.naBaseId);
- 
+
     // Find School Owner Record by Name from Portal Client Object to return list of Students.
     // let studentsArr = []
 
@@ -58,7 +58,7 @@ export async function getServerSideProps(context) {
     //     view: "Grid view",
     //     filterByFormula: `{School Owner (from Gracie Barra Location)} = "${fullName}"`
     // }).firstPage()
-    
+
     // console.log(records)
     // records.forEach(record => studentsArr.push({
     //     name: record.fields.Student,
@@ -70,10 +70,10 @@ export async function getServerSideProps(context) {
 
     // TEMP PROPS
     return {
-        props: { 
+        props: {
             clientName: fullName,
             allStudents: allStudents
-         }
+        }
     }
 }
 
@@ -82,17 +82,27 @@ export async function getServerSideProps(context) {
 
 function HomePage(props) {
     // log clientId on FE
-      // const { query } = useRouter();
-      // clientId = query.clientId
-      // console.log(`Current clientId: ${clientId}`)
-      
+    // const { query } = useRouter();
+    // clientId = query.clientId
+    // console.log(`Current clientId: ${clientId}`)
+
     // log all students
     //   console.log(props.allStudents)
 
 
     const [selected, setSelected] = useState('')
     console.log('Selected: ' + selected)
-    
+    const [rank, setRank] = useState('None')
+    console.log('Rank: ' + rank)
+
+    useEffect(() => {
+        if (selected !== '') {
+            let studentRecord = props.allStudents.filter(student => student.recordId === selected)
+            console.log(studentRecord[0])
+            setRank(studentRecord[0].rank)
+        }
+    }, [selected]);
+
 
     return (
         <>
@@ -103,12 +113,13 @@ function HomePage(props) {
                 <div>Gracie Barra Location</div>
                 <div>School Owner: {props.clientName} </div>
                 <div>Select Student:
-                    <select onChange={e =>{ setSelected(e.target.value) }}>
+                    <select onChange={e => { setSelected(e.target.value) }}>
                         <option value="select student">Select Student</option>
-                        {props.allStudents.map((student) => 
+                        {props.allStudents.map((student) =>
                             <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
                     </select>
                 </div>
+                <div>Selected student rank: {rank}</div>
             </Container>
         </>
     )

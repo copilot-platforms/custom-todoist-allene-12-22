@@ -1,4 +1,4 @@
-import {gbBase, gbTable} from './constants'
+import { gbBase, gbTable } from './constants'
 
 // init Airtable and base
 const Airtable = require('airtable');
@@ -18,12 +18,19 @@ export async function getStudents(clientName) {
         view: "Grid view",
         filterByFormula: `{School Owner (from Gracie Barra Location)} = "${clientName}"`
     }).firstPage()
-    
+
+
     // console.log(records)
-    records.forEach(record => studentsArr.push({
-        name: record.fields.Student,
-        recordId: record.id
-    }))
+    // records.forEach(record => console.log(record.fields['Belt Rank']))
+    records.forEach((record) => {
+        let currentRank = 'None'
+        if (record.fields['Belt Rank']) {currentRank = record.fields['Belt Rank']}
+        studentsArr.push({
+            name: record.fields.Student,
+            recordId: record.id,
+            rank: currentRank
+        })
+    })
 
     return studentsArr
 }
