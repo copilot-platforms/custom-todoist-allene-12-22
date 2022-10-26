@@ -5,6 +5,8 @@ import {useState} from 'react'
 
 import {gbBase, gbTable} from './utils/constants'
 
+import {getStudents} from './utils/airtable'
+
 
 let clientId;
 
@@ -39,7 +41,7 @@ export async function getServerSideProps(context) {
 
 // -------------AIRTABLE API TEST-------------------
 
-    var Airtable = require('airtable');
+    // var Airtable = require('airtable');
 
     /* DETERMINE BASE 
     
@@ -48,30 +50,32 @@ export async function getServerSideProps(context) {
     */
 
     // INIT BASE + schoolOwnerRecordId
-    var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.naBaseId);
+    // var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.naBaseId);
  
     // Find School Owner Record by Name from Portal Client Object to return list of Students.
-    let studentsArr = []
+    // let studentsArr = []
 
-    const records = await base(gbTable.students.tableName).select({
-        // Selecting the record with matching full name
-        maxRecords: 150,
-        view: "Grid view",
-        filterByFormula: `{School Owner (from Gracie Barra Location)} = "${fullName}"`
-    }).firstPage()
+    // const records = await base(gbTable.students.tableName).select({
+    //    // Selecting the record with matching full name
+    //     maxRecords: 150,
+    //     view: "Grid view",
+    //     filterByFormula: `{School Owner (from Gracie Barra Location)} = "${fullName}"`
+    // }).firstPage()
     
     // console.log(records)
-    records.forEach(record => studentsArr.push({
-        name: record.fields.Student,
-        recordId: record.id
-    }))
+    // records.forEach(record => studentsArr.push({
+    //     name: record.fields.Student,
+    //     recordId: record.id
+    // }))
     // console.log(studentsArr)
+
+    const allStudents = await getStudents(fullName)
 
     // TEMP PROPS
     return {
         props: { 
             clientName: fullName,
-            allStudents: studentsArr
+            allStudents: allStudents
          }
     }
 }
@@ -86,11 +90,12 @@ function HomePage(props) {
       // console.log(`Current clientId: ${clientId}`)
       
     // log all students
-      // console.log(props.allStudents)
+    //   console.log(props.allStudents)
 
 
     const [selected, setSelected] = useState('')
     console.log('Selected: ' + selected)
+    
 
     return (
         <>
