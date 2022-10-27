@@ -48,7 +48,7 @@ const getStudents = async function (clientName) {
         view: "Grid view",
         filterByFormula: `{School Owner (from Gracie Barra Location)} = "${clientName}"`
     }).firstPage()
-    console.log(records)
+    // console.log(records)
 
 
     // creates array of student objects with only relevant properties
@@ -85,8 +85,21 @@ const updateBeltRank = async function (id, verified) {
         return updateVerified
 }
 
+// PATCH Status (Active/Suspended) to Airtable 
+const updateStatus = async function (id, status) {
+    let statusUpdate = ''
+    await studentsTable.update([
+        {
+            "id": id,
+            "fields": {
+                Status: status,
+            }
+        }]).then(res => statusUpdate = res[0].fields.Status) // returns response containing only new active/sus status text for display
+        return statusUpdate
+}
+
 
 
 
 // exports
-export { getStudents, updateBeltRank }
+export { getStudents, updateBeltRank, updateStatus}

@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { getStudents, updateBeltRank } from '../utils/airtable'
+import { getStudents, updateBeltRank, updateStatus } from '../utils/airtable'
 
 
 /* 
@@ -66,6 +66,12 @@ function HomePage(props) {
         refreshData()
     }
 
+    // UPDATE STATUS AND REFRESH DATA
+    const handleUpdateStatus = async function (id, status) {
+        updateStatus(id, status).then(res => setStatus(res))
+        refreshData()
+    }
+
 
     return (
         <>
@@ -91,8 +97,7 @@ function HomePage(props) {
                 <div className='row'>Status: <span className='input'>{status}</span></div>
                 {status === 'Active' ?
                     <div className='row'>
-                        <button>suspend</button>
-                        {/* <button onClick={e => handleUpdateStatus(selected, "Yes")}>Verify</button> */}
+                        <button onClick={e => handleUpdateStatus(selected, "Suspended")}>Suspend</button>
                     </div>
                     : null}
             </Container>
