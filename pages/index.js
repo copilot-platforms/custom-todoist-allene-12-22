@@ -33,13 +33,18 @@ const portalGetReq = {
 
 function HomePage(props) {
     const router = useRouter()
+    const refreshData = () => {router.replace(router.asPath)}
 
 
     const [selected, setSelected] = useState('') // SELECTED STUDENT STATE
     console.log('Selected: ' + selected)
+
     const [rank, setRank] = useState('') // SELECTED STUDENT RANK STATE
     console.log('Rank: ' + rank)
+
     const [isVerified, setIsVerified] = useState('') // SELECTED STUDENT VERIFIED STATE
+
+    const [status, setStatus] = useState('') // SELECTED STUDENT STATUS (ACTIVE/SUSPENDED) STATE
 
 
     useEffect(() => {
@@ -57,7 +62,7 @@ function HomePage(props) {
     // UPDATE RANK AND REFRESH DATA
     const handleUpdateRank = async function (id, verified) {
         updateBeltRank(id, verified).then(res => setIsVerified(res))
-        router.replace(router.asPath);
+        refreshData()
     }
 
 
