@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { getStudents, updateBeltRank, getLocation } from '../utils/airtable'
+import { getStudents, updateBeltRank } from '../utils/airtable'
 
 
 /* 
@@ -121,8 +121,8 @@ export async function getServerSideProps(context) {
     // -------------AIRTABLE API -------------------
 
 
-    const allStudents = await getStudents(fullName)
-    const location = await getLocation(fullName)
+    const allStudents = await getStudents(fullName) // Calls Airtable API to get all students matched on client name
+    // const location = await getLocation(fullName)
 
 
 

@@ -86,4 +86,4 @@ const updateBeltRank = async function (id, verified) {
 
 
 // exports
-export { getStudents, updateBeltRank, getLocation }
+export { getStudents, updateBeltRank }
