@@ -97,9 +97,11 @@ function HomePage(props) {
                 <div className='row'>Status: <span className='input'>{status}</span></div>
                 {status === 'Active' ?
                     <div className='row'>
-                        <button onClick={e => handleUpdateStatus(selected, "Suspended")}>Suspend</button>
+                        <button value="Suspended" onClick={e => handleUpdateStatus(selected, e.target.value)}>Suspend</button>
                     </div>
-                    : null}
+                    : <div className='row'>
+                        <button value="Active" onClick={e => handleUpdateStatus(selected, e.target.value)}>Activate</button>
+                    </div>}
             </Container>
         </>
     )
