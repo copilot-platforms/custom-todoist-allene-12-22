@@ -33,7 +33,7 @@ const portalGetReq = {
 
 function HomePage(props) {
     const router = useRouter()
-    const refreshData = () => {router.replace(router.asPath)}
+    const refreshData = () => { router.replace(router.asPath) }
 
 
     const [selected, setSelected] = useState('') // SELECTED STUDENT STATE
@@ -87,6 +87,7 @@ function HomePage(props) {
                         <button onClick={e => handleUpdateRank(selected, "Yes")}>Verify</button>
                     </div>
                     : null}
+                <div className='row'>Status: <span className='input'>{"placeholder"}</span></div>
 
             </Container>
         </>
