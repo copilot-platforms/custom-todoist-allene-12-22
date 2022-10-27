@@ -62,15 +62,6 @@ function HomePage(props) {
         }
     }, [selected]);
 
-    // UPDATE SELECTED
-    // const handleSelect = () => {
-    //     if (selected === 'select student') {
-    //         setRank('')
-    //         setIsVerified('')
-    //         setStatus('')
-    //     }
-    // }
-
     // UPDATE RANK AND REFRESH DATA
     const handleUpdateRank = async function (id, verified) {
         updateBeltRank(id, verified).then(res => setIsVerified(res))
@@ -100,9 +91,7 @@ function HomePage(props) {
                 </Head>
                 <div className='header'><h1>{props.clientName}</h1></div>
                 <div className='row'>Select Student:
-                    <select className="input" onChange={e => { 
-                        setSelected(e.target.value) 
-                        }}>
+                    <select className="input" onChange={e => { setSelected(e.target.value) }}>
                         <option value="select student">Select Student</option>
                         {props.allStudents.map((student) =>
                             <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
