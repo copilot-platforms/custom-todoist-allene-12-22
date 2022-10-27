@@ -55,10 +55,21 @@ function HomePage(props) {
             setRank(studentRecord[0].rank)
             setIsVerified(studentRecord[0].isVerified)
             setStatus(studentRecord[0].status)
-        } else if (selected === 'select student') { setRank('') }
+        } else if (selected === 'select student') { 
+            setRank('') 
+            setStatus('')
+            setIsVerified('')
+        }
     }, [selected]);
 
-
+    // UPDATE SELECTED
+    // const handleSelect = () => {
+    //     if (selected === 'select student') {
+    //         setRank('')
+    //         setIsVerified('')
+    //         setStatus('')
+    //     }
+    // }
 
     // UPDATE RANK AND REFRESH DATA
     const handleUpdateRank = async function (id, verified) {
@@ -72,16 +83,26 @@ function HomePage(props) {
         refreshData()
     }
 
+    const displayStatus = () => {
+        if (status === 'Active') {
+            return <button value="Suspended" onClick={e => handleUpdateStatus(selected, e.target.value)}>Suspend</button>
+        } else if (status === 'Suspended') {
+           return <button value="Active" onClick={e => handleUpdateStatus(selected, e.target.value)}>Activate</button>
+        } else { return null }
+    }
+
 
     return (
         <>
             <Container>
                 <Head>
-                    <title>Example App</title>
+                    <title>GB Actions Panel</title>
                 </Head>
                 <div className='header'><h1>{props.clientName}</h1></div>
                 <div className='row'>Select Student:
-                    <select className="input" onChange={e => { setSelected(e.target.value) }}>
+                    <select className="input" onChange={e => { 
+                        setSelected(e.target.value) 
+                        }}>
                         <option value="select student">Select Student</option>
                         {props.allStudents.map((student) =>
                             <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
@@ -95,13 +116,9 @@ function HomePage(props) {
                     </div>
                     : null}
                 <div className='row'>Status: <span className='input'>{status}</span></div>
-                {status === 'Active' ?
-                    <div className='row'>
-                        <button value="Suspended" onClick={e => handleUpdateStatus(selected, e.target.value)}>Suspend</button>
-                    </div>
-                    : <div className='row'>
-                        <button value="Active" onClick={e => handleUpdateStatus(selected, e.target.value)}>Activate</button>
-                    </div>}
+                <div className='row'>
+                    {displayStatus()}
+                </div>
             </Container>
         </>
     )
