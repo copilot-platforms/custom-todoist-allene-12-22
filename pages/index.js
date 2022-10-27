@@ -6,6 +6,11 @@ import { useRouter } from 'next/router'
 import { getStudents, updateBeltRank, getLocation } from '../utils/airtable'
 
 
+/* 
+-------------GLOBALS-------------------
+*/ 
+
+// VARIABLES
 let clientId;
 
 
@@ -19,58 +24,39 @@ const portalGetReq = {
 }
 
 
-// -------------Server: Get Props-------------------
+
+
+/* 
+-------------SERVER-------------------
+*/ 
 
 export async function getServerSideProps(context) {
-    // -------------PORTAL API-------------------
+
+// -------------PORTAL API-------------------
+    
     // CHECK PORTAL CLIENT ID FROM PARAMS
-    console.log(`Query: ${context.query.clientId}`)
 
     // SET PORTAL CLIENT ID FROM PARAMS
     clientId = context.query.clientId
-    // SET TEMP ID
-    // clientId = 'b7db1342-2158-476f-b967-55b6f5aec60d'
 
     // GET CLIENT OBJECT FROM clientId -> PORTAL API
     const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
     const clientData = await clientRes.json()
+
+    // CONSTRUCT FULL NAME
     const fullName = `${clientData.givenName} ${clientData.familyName}`
 
 
-    // -------------AIRTABLE API TEST-------------------
 
-    // var Airtable = require('airtable');
+// -------------AIRTABLE API -------------------
 
-    /* DETERMINE BASE 
-    
-        figure this out!
-    
-    */
-
-    // INIT BASE + schoolOwnerRecordId
-    // var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.naBaseId);
-
-    // Find School Owner Record by Name from Portal Client Object to return list of Students.
-    // let studentsArr = []
-
-    // const records = await base(gbTable.students.tableName).select({
-    //    // Selecting the record with matching full name
-    //     maxRecords: 150,
-    //     view: "Grid view",
-    //     filterByFormula: `{School Owner (from Gracie Barra Location)} = "${fullName}"`
-    // }).firstPage()
-
-    // console.log(records)
-    // records.forEach(record => studentsArr.push({
-    //     name: record.fields.Student,
-    //     recordId: record.id
-    // }))
-    // console.log(studentsArr)
 
     const allStudents = await getStudents(fullName)
     const location = await getLocation(fullName)
 
-    // TEMP PROPS
+
+
+// -----------PROPS-----------------------------
     return {
         props: {
             clientName: fullName,
@@ -80,28 +66,23 @@ export async function getServerSideProps(context) {
 }
 
 
-// -------------APP-------------------
+/* 
+-------------APP------------------- 
+*/
 
 function HomePage(props) {
-    // log clientId on FE
-    // const { query } = useRouter();
-    // clientId = query.clientId
-    // console.log(`Current clientId: ${clientId}`)
-
-    // log all students
-    //   console.log(props.allStudents)
-
-    const router = useRouter()
+    const router = useRouter() 
 
 
-    const [selected, setSelected] = useState('')
+    const [selected, setSelected] = useState('') // SELECTED STUDENT STATE
     console.log('Selected: ' + selected)
-    const [rank, setRank] = useState('')
+    const [rank, setRank] = useState('') // SELECTED STUDENT RANK STATE
     console.log('Rank: ' + rank)
-    const [isVerified, setIsVerified] = useState('')
+    const [isVerified, setIsVerified] = useState('') // SELECTED STUDENT VERIFIED STATE
 
 
     useEffect(() => {
+        // CHECK IF STUDENT IS SELECTED AND SET STATE
         if (selected !== '' && selected !== 'select student') {
             let studentRecord = props.allStudents.filter(student => student.recordId === selected)
             console.log(studentRecord[0])
@@ -112,7 +93,7 @@ function HomePage(props) {
 
 
 
-
+    // UPDATE RANK AND REFRESH DATA
     const handleUpdateRank = async function (id, verified) {
         updateBeltRank(id, verified).then(res => setIsVerified(res))
         router.replace(router.asPath);
