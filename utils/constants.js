@@ -1,6 +1,8 @@
 // AIRTABLE API -uses airtable npm
 
-// Regional Base Ids
+
+
+// REGIONAL BASE IDs
 export const gbBase = {
     naBaseId: 'appVOKLbql3ITyvNZ',
     bzBaseId: '',
@@ -9,12 +11,11 @@ export const gbBase = {
     cBaseId: '',
 }
 
-// Global Table Names - table names shared by all bases - called by using base(table_name)
+
+
+
+// TABLE NAMES AND IDs (BY BASE)
 export const gbTable = {
-    // global: {
-    //     studentsTbl: 'Students',
-    //     lwPurchasesTbl: 'LW Purchases'
-    // },
     locations: {
         na: {
             name: 'GB NA Locations',
