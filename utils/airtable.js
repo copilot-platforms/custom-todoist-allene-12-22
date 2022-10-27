@@ -48,20 +48,23 @@ const getStudents = async function (clientName) {
         view: "Grid view",
         filterByFormula: `{School Owner (from Gracie Barra Location)} = "${clientName}"`
     }).firstPage()
-    // console.log(records)
+    console.log(records)
 
 
     // creates array of student objects with only relevant properties
     records.forEach((record) => {
-        let currentRank = 'None'
+        let currentRank = ''
         let isVerified = ''
-        if (record.fields['Belt Rank']) { currentRank = record.fields['Belt Rank'] }
-        if (record.fields['Belt Rank Verified']) { isVerified = record.fields['Belt Rank Verified'] }
+        let currentStatus = ''
+        if (record.fields['Belt Rank']) { currentRank = record.fields['Belt Rank'] } else {currentRank = 'N/A'}
+        if (record.fields['Belt Rank Verified']) { isVerified = record.fields['Belt Rank Verified'] } else {isVerified = 'N/A'}
+        if (record.fields.Status) { currentStatus = record.fields.Status } else {currentStatus = 'N/A'}
         studentsArr.push({
             name: record.fields.Student,
             recordId: record.id,
             rank: currentRank,
-            isVerified: isVerified
+            isVerified: isVerified,
+            status: currentStatus
         })
     })
 

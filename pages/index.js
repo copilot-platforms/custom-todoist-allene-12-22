@@ -54,6 +54,7 @@ function HomePage(props) {
             console.log(studentRecord[0])
             setRank(studentRecord[0].rank)
             setIsVerified(studentRecord[0].isVerified)
+            setStatus(studentRecord[0].status)
         } else if (selected === 'select student') { setRank('') }
     }, [selected]);
 
@@ -87,7 +88,7 @@ function HomePage(props) {
                         <button onClick={e => handleUpdateRank(selected, "Yes")}>Verify</button>
                     </div>
                     : null}
-                <div className='row'>Status: <span className='input'>{"placeholder"}</span></div>
+                <div className='row'>Status: <span className='input'>{status}</span></div>
 
             </Container>
         </>
