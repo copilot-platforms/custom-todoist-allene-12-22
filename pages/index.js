@@ -8,7 +8,7 @@ import { getStudents, updateBeltRank, getLocation } from '../utils/airtable'
 
 /* 
 -------------GLOBALS-------------------
-*/ 
+*/
 
 // VARIABLES
 let clientId;
@@ -26,52 +26,13 @@ const portalGetReq = {
 
 
 
-/* 
--------------SERVER-------------------
-*/ 
-
-export async function getServerSideProps(context) {
-
-// -------------PORTAL API-------------------
-    
-    // CHECK PORTAL CLIENT ID FROM PARAMS
-
-    // SET PORTAL CLIENT ID FROM PARAMS
-    clientId = context.query.clientId
-
-    // GET CLIENT OBJECT FROM clientId -> PORTAL API
-    const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
-    const clientData = await clientRes.json()
-
-    // CONSTRUCT FULL NAME
-    const fullName = `${clientData.givenName} ${clientData.familyName}`
-
-
-
-// -------------AIRTABLE API -------------------
-
-
-    const allStudents = await getStudents(fullName)
-    const location = await getLocation(fullName)
-
-
-
-// -----------PROPS-----------------------------
-    return {
-        props: {
-            clientName: fullName,
-            allStudents: allStudents
-        }
-    }
-}
-
 
 /* 
 -------------APP------------------- 
 */
 
 function HomePage(props) {
-    const router = useRouter() 
+    const router = useRouter()
 
 
     const [selected, setSelected] = useState('') // SELECTED STUDENT STATE
@@ -128,7 +89,49 @@ function HomePage(props) {
 }
 
 
-
-
-
 export default HomePage
+
+
+
+
+
+
+/* 
+-------------SERVER-------------------
+*/
+
+export async function getServerSideProps(context) {
+
+    // -------------PORTAL API-------------------
+
+    // CHECK PORTAL CLIENT ID FROM PARAMS
+
+    // SET PORTAL CLIENT ID FROM PARAMS
+    clientId = context.query.clientId
+
+    // GET CLIENT OBJECT FROM clientId -> PORTAL API
+    const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
+    const clientData = await clientRes.json()
+
+    // CONSTRUCT FULL NAME
+    const fullName = `${clientData.givenName} ${clientData.familyName}`
+
+
+
+    // -------------AIRTABLE API -------------------
+
+
+    const allStudents = await getStudents(fullName)
+    const location = await getLocation(fullName)
+
+
+
+    // -----------PROPS-----------------------------
+    return {
+        props: {
+            clientName: fullName,
+            allStudents: allStudents
+        }
+    }
+}
+
