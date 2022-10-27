@@ -9,33 +9,33 @@ const studentsTable = base(gbTable.students.tableName)
 const locsTable = base(gbTable.locations.na.name)
 
 /* 
-    Locations Functions
+    LOCATIONS API
 */
 
-const getLocation = async function (clientName) {
+// const getLocation = async function (clientName) {
 
-    const records = await locsTable.select({
-        // Selecting the record with matching full name
-        maxRecords: 150,
-        view: "Grid view",
-        filterByFormula: `{School Owner} = "${clientName}"`
-    }).firstPage()
+//     const records = await locsTable.select({
+//         // Selecting the record with matching full name
+//         maxRecords: 150,
+//         view: "Grid view",
+//         filterByFormula: `{School Owner} = "${clientName}"`
+//     }).firstPage()
 
 
-    // console.log(records)
+    // //console.log(records)
     // records.forEach(record => console.log(record.fields['Belt Rank']))
-    records.forEach((record) => {
-        console.log(record.fields['School Name'])
-    })
+    // records.forEach((record) => {
+    //     console.log(record.fields['School Name'])
+    // })
 
-}
+// }
 
 
 
 
 
 /* 
-    Students Functions
+    STUDENTS API
 */
 
 // get all students and map fields
@@ -48,10 +48,10 @@ const getStudents = async function (clientName) {
         view: "Grid view",
         filterByFormula: `{School Owner (from Gracie Barra Location)} = "${clientName}"`
     }).firstPage()
-
-
     // console.log(records)
-    // records.forEach(record => console.log(record.fields['Belt Rank']))
+
+
+    // creates array of student objects with only relevant properties
     records.forEach((record) => {
         let currentRank = 'None'
         let isVerified = ''
@@ -68,8 +68,9 @@ const getStudents = async function (clientName) {
     return studentsArr
 }
 
+
+// PATCH Belt Rank Verification to Airtable 
 const updateBeltRank = async function (id, verified) {
-    console.log('hi')
     let updateVerified = ''
     await studentsTable.update([
         {
@@ -77,8 +78,12 @@ const updateBeltRank = async function (id, verified) {
             "fields": {
                 "Belt Rank Verified": verified,
             }
-        }]).then(res => updateVerified = res[0].fields['Belt Rank Verified'])
+        }]).then(res => updateVerified = res[0].fields['Belt Rank Verified']) // returns response containing only new verified status text for display
         return updateVerified
 }
 
+
+
+
+// exports
 export { getStudents, updateBeltRank, getLocation }
