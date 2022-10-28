@@ -74,6 +74,7 @@ function HomePage(props) {
         refreshData()
     }
 
+    // CONDITIONALLY DISPLAY ACTIVATE/SUSPEND BUTTON
     const displayStatus = () => {
         if (status === 'Active') {
             return <button value="Suspended" onClick={e => handleUpdateStatus(selected, e.target.value)}>Suspend</button>
