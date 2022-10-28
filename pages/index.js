@@ -55,8 +55,8 @@ function HomePage(props) {
             setRank(studentRecord[0].rank)
             setIsVerified(studentRecord[0].isVerified)
             setStatus(studentRecord[0].status)
-        } else if (selected === 'select student') { 
-            setRank('') 
+        } else if (selected === 'select student') {
+            setRank('')
             setStatus('')
             setIsVerified('')
         }
@@ -78,7 +78,7 @@ function HomePage(props) {
         if (status === 'Active') {
             return <button value="Suspended" onClick={e => handleUpdateStatus(selected, e.target.value)}>Suspend</button>
         } else if (status === 'Suspended') {
-           return <button value="Active" onClick={e => handleUpdateStatus(selected, e.target.value)}>Activate</button>
+            return <button value="Active" onClick={e => handleUpdateStatus(selected, e.target.value)}>Activate</button>
         } else { return null }
     }
 
@@ -90,23 +90,31 @@ function HomePage(props) {
                     <title>GB Actions Panel</title>
                 </Head>
                 <div className='header'><h1>{props.clientName}</h1></div>
-                <div className='row'>Select Student:
-                    <select className="input" onChange={e => { setSelected(e.target.value) }}>
-                        <option value="select student">Select Student</option>
-                        {props.allStudents.map((student) =>
-                            <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
-                    </select>
-                </div>
-                <div className='row'>Current rank: <span className='input'>{rank}</span></div>
-                <div className='row'>Verified: <span className='input'>{isVerified}</span></div>
-                {isVerified === 'No' ?
-                    <div className='row'>
-                        <button onClick={e => handleUpdateRank(selected, "Yes")}>Verify</button>
+                <div className='flex-container'>
+                    <div className='row'>Select Student:
+                        <div className='custom-select'>
+                            <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
+                                <option value="select student">Select Student</option>
+                                {props.allStudents.map((student) =>
+                                    <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
+                            </select>
+                        </div>
                     </div>
-                    : null}
-                <div className='row'>Status: <span className='input'>{status}</span></div>
-                <div className='row'>
-                    {displayStatus()}
+                    <div className='row'>Current rank: <span className='input'>{rank}</span></div>
+                    <div className='row'>Verified: <span className='input'>{isVerified}</span></div>
+                    {isVerified === 'No' ?
+                        <div className='row'>
+                            <div className='btn'>
+                                <button onClick={e => handleUpdateRank(selected, "Yes")}>Verify</button>
+                            </div>
+                        </div>
+                        : null}
+                    <div className='row'>Status: <span className='input'>{status}</span></div>
+                    <div className='row'>
+                        <div className='btn'>
+                            {displayStatus()}
+                        </div>
+                    </div>
                 </div>
             </Container>
         </>
