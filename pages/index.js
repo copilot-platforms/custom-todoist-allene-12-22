@@ -156,14 +156,18 @@ export async function getServerSideProps(context) {
 
     const allStudents = await getStudents(fullName) // Calls Airtable API to get all students matched on client name
     // const location = await getLocation(fullName)
-
+    const sortStudents = allStudents.sort(function(a,b){
+        let textA = a.name.toUpperCase()
+        let textB = b.name.toUpperCase()
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    })
 
 
     // -----------PROPS-----------------------------
     return {
         props: {
             clientName: fullName,
-            allStudents: allStudents
+            allStudents: sortStudents
         }
     }
 }
