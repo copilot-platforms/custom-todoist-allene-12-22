@@ -26,9 +26,13 @@ const getLocation = async function (clientName) {
     // console.log(records)
     // records.forEach(record => console.log(record.fields['Belt Rank']))
     records.forEach((record) => {
-        console.log(record.fields['School Name'])
+        // console.log(record.fields['School Name'])
+        locsArr.push({
+            schoolName: record.fields['School Name'],
+            recordId: record.id
+        })
     })
-
+    console.log(locsArr)
 }
 
 
