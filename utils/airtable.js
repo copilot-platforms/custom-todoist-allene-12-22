@@ -58,6 +58,7 @@ const getStudents = async function (clientName) {
 
     // creates array of student objects with only relevant properties
     records.forEach((record) => {
+        // console.log(record.fields['Gracie Barra Location'][0])
         let currentRank = ''
         let isVerified = ''
         let currentStatus = ''
@@ -69,10 +70,11 @@ const getStudents = async function (clientName) {
             recordId: record.id,
             rank: currentRank,
             isVerified: isVerified,
-            status: currentStatus
+            status: currentStatus,
+            school: record.fields['Gracie Barra Location'][0]
         })
     })
-
+    console.log(studentsArr)
     return studentsArr
 }
 
