@@ -86,6 +86,17 @@ function HomePage(props) {
         } else { return null }
     }
 
+    // CONDITIONALLY DISPLAY STUDENT LIST BASED ON LOCATION
+    const getStudentsByLocation = () => {
+        return <div className='custom-select'>
+            <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
+                <option value="select student">Select Student</option>
+                {props.allStudents.map((student) =>
+                    <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
+            </select>
+        </div>
+    }
+
 
     return (
         <>
@@ -95,7 +106,7 @@ function HomePage(props) {
                 </Head>
                 <div className='header'><h1>{props.clientName}</h1></div>
                 <div className='flex-container'>
-                <div className='row'>Select Location:
+                    <div className='row'>Select Location:
                         <div className='custom-select'>
                             <select className="select-selected" onChange={e => { setLocation(e.target.value) }}>
                                 <option value="select location">Select Location</option>
@@ -105,13 +116,14 @@ function HomePage(props) {
                         </div>
                     </div>
                     <div className='row'>Select Student:
-                        <div className='custom-select'>
+                    {getStudentsByLocation()}
+                        {/* <div className='custom-select'>
                             <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
                                 <option value="select student">Select Student</option>
                                 {props.allStudents.map((student) =>
                                     <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
                             </select>
-                        </div>
+                        </div> */}
                     </div>
                     <div className='row'>Current rank: <span className='input'>{rank}</span></div>
                     <div className='row'>Verified: <span className='input'>{isVerified}</span></div>
@@ -172,7 +184,7 @@ export async function getServerSideProps(context) {
 
     const allStudents = await getStudents(fullName) // Calls Airtable API to get all students matched on client name
     const allLocations = await getLocation(fullName)
-    const sortStudents = allStudents.sort(function(a,b){
+    const sortStudents = allStudents.sort(function (a, b) {
         let textA = a.name.toUpperCase()
         let textB = b.name.toUpperCase()
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
