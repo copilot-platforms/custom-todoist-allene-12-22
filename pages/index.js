@@ -46,6 +46,9 @@ function HomePage(props) {
 
     const [status, setStatus] = useState('') // SELECTED STUDENT STATUS (ACTIVE/SUSPENDED) STATE
 
+    const [location, setLocation] = useState('') // SELECTED LOCATION STATE
+    console.log('Location: ' + location)
+
 
     useEffect(() => {
         // CHECK IF STUDENT IS SELECTED AND SET STATE
@@ -92,6 +95,15 @@ function HomePage(props) {
                 </Head>
                 <div className='header'><h1>{props.clientName}</h1></div>
                 <div className='flex-container'>
+                <div className='row'>Select Location:
+                        <div className='custom-select'>
+                            <select className="select-selected" onChange={e => { setLocation(e.target.value) }}>
+                                <option value="select location">Select Location</option>
+                                {props.allLocations.map((location) =>
+                                    <option key={location.recordId} value={location.recordId}>{location.schoolName}</option>)}
+                            </select>
+                        </div>
+                    </div>
                     <div className='row'>Select Student:
                         <div className='custom-select'>
                             <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
@@ -172,6 +184,7 @@ export async function getServerSideProps(context) {
         props: {
             clientName: fullName,
             allStudents: sortStudents,
+            allLocations
         }
     }
 }
