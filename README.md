@@ -1,19 +1,16 @@
 API Workflow:
 
-Portal
--GET client by query param
+# GB Actions Panel for Copilot
+This repo is a next.js app that uses the Copilot and Airtable APIs to populate data in a portal and update fields in Airtable.
 
-Airtable 
-# figure out how to get base from web app dynamically
+## To run locally:
+- Run npm install
+- Run npm run dev
+- Access at localhost:3000
 
-GET all students where school owner name is exact match 
-# above for now, maybe better way?
+## Utils
+### airtable.js
+- Contains all Airtable API calls and related functions
 
-Create array with student names and AT record IDs
-
-To Do:
-POST verify belt rank
-POST Active/Suspended
-Refactor
-...?
-
+### constants.js
+- Contains constants got Gracie Barra Airtable bases and tables
