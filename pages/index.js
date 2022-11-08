@@ -88,6 +88,10 @@ function HomePage(props) {
 
     // CONDITIONALLY DISPLAY STUDENT LIST BASED ON LOCATION
     const getStudentsByLocation = () => {
+        let studentsByLocation
+        console.log('intetnal location: '+ location)
+        if (location !== ''){studentsByLocation = props.allStudents.filter(student => student.school === location)}
+        console.log(studentsByLocation)
         return <div className='custom-select'>
             <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
                 <option value="select student">Select Student</option>
