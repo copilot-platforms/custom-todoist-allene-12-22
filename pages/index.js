@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { getStudents, updateBeltRank, updateStatus } from '../utils/airtable'
+import { getStudents, updateBeltRank, updateStatus, getLocation } from '../utils/airtable'
 
 
 /* 
@@ -141,10 +141,10 @@ export async function getServerSideProps(context) {
     // CHECK PORTAL CLIENT ID FROM PARAMS
 
     // SET PORTAL CLIENT ID FROM PARAMS
-    // clientId = context.query.clientId
+    clientId = context.query.clientId
 
     // TEMP CLIENT ID FOR TESTING
-    clientId = '7f999f5e-0b43-4598-97fc-0ccaac0136fe'
+    // clientId = '7f999f5e-0b43-4598-97fc-0ccaac0136fe'
 
     // GET CLIENT OBJECT FROM clientId -> PORTAL API
     const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
@@ -159,7 +159,7 @@ export async function getServerSideProps(context) {
 
 
     const allStudents = await getStudents(fullName) // Calls Airtable API to get all students matched on client name
-    // const location = await getLocation(fullName)
+    const allLocations = await getLocation(fullName)
     const sortStudents = allStudents.sort(function(a,b){
         let textA = a.name.toUpperCase()
         let textB = b.name.toUpperCase()
@@ -171,7 +171,7 @@ export async function getServerSideProps(context) {
     return {
         props: {
             clientName: fullName,
-            allStudents: sortStudents
+            allStudents: sortStudents,
         }
     }
 }

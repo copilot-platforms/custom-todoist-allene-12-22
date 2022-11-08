@@ -12,23 +12,24 @@ const locsTable = base(gbTable.locations.na.name)
     LOCATIONS API
 */
 
-// const getLocation = async function (clientName) {
+const getLocation = async function (clientName) {
+    let locsArr = []
 
-//     const records = await locsTable.select({
-//         // Selecting the record with matching full name
-//         maxRecords: 150,
-//         view: "Grid view",
-//         filterByFormula: `{School Owner} = "${clientName}"`
-//     }).firstPage()
+    const records = await locsTable.select({
+        // Selecting the record with matching full name
+        maxRecords: 150,
+        view: "Grid view",
+        filterByFormula: `{School Owner} = "${clientName}"`
+    }).firstPage()
 
 
-    // //console.log(records)
+    // console.log(records)
     // records.forEach(record => console.log(record.fields['Belt Rank']))
-    // records.forEach((record) => {
-    //     console.log(record.fields['School Name'])
-    // })
+    records.forEach((record) => {
+        console.log(record.fields['School Name'])
+    })
 
-// }
+}
 
 
 
@@ -102,4 +103,4 @@ const updateStatus = async function (id, status) {
 
 
 // exports
-export { getStudents, updateBeltRank, updateStatus}
+export { getStudents, updateBeltRank, updateStatus, getLocation}
