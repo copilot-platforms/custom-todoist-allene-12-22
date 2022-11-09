@@ -35,7 +35,7 @@ function HomePage(props) {
     const router = useRouter()
     const refreshData = () => { router.replace(router.asPath) }
 
-    // RESET STATES
+    // RESET STATES FUNCTION
     const reset = () => {
         setRank('')
         setStatus('')
@@ -72,7 +72,7 @@ function HomePage(props) {
 
 
 
-    
+
 
     // UPDATE RANK AND REFRESH DATA
     const handleUpdateRank = async function (id, verified) {
