@@ -12,23 +12,28 @@ const locsTable = base(gbTable.locations.na.name)
     LOCATIONS API
 */
 
-// const getLocation = async function (clientName) {
+const getLocation = async function (clientName) {
+    let locsArr = []
 
-//     const records = await locsTable.select({
-//         // Selecting the record with matching full name
-//         maxRecords: 150,
-//         view: "Grid view",
-//         filterByFormula: `{School Owner} = "${clientName}"`
-//     }).firstPage()
+    const records = await locsTable.select({
+        // Selecting the record with matching full name
+        maxRecords: 150,
+        view: "Grid view",
+        filterByFormula: `{School Owner} = "${clientName}"`
+    }).firstPage()
 
 
-    // //console.log(records)
-    // records.forEach(record => console.log(record.fields['Belt Rank']))
-    // records.forEach((record) => {
-    //     console.log(record.fields['School Name'])
-    // })
-
-// }
+    // console.log(records)
+    records.forEach((record) => {
+        // console.log(record.fields['School Name'])
+        locsArr.push({
+            schoolName: record.fields['School Name'],
+            recordId: record.id
+        })
+    })
+    // console.log(locsArr)
+    return locsArr
+}
 
 
 
@@ -44,30 +49,33 @@ const getStudents = async function (clientName) {
 
     const records = await studentsTable.select({
         // Selecting the record with matching full name
-        maxRecords: 150,
+        // maxRecords: 150,
         view: "Grid view",
         filterByFormula: `{School Owner (from Gracie Barra Location)} = "${clientName}"`
-    }).firstPage()
-    // console.log(records)
+    }).eachPage(function page(records, fetchNextPage){
 
-
-    // creates array of student objects with only relevant properties
-    records.forEach((record) => {
-        let currentRank = ''
-        let isVerified = ''
-        let currentStatus = ''
-        if (record.fields['Belt Rank']) { currentRank = record.fields['Belt Rank'] } else {currentRank = 'N/A'}
-        if (record.fields['Belt Rank Verified']) { isVerified = record.fields['Belt Rank Verified'] } else {isVerified = 'N/A'}
-        if (record.fields.Status) { currentStatus = record.fields.Status } else {currentStatus = 'N/A'}
-        studentsArr.push({
-            name: record.fields.Student,
-            recordId: record.id,
-            rank: currentRank,
-            isVerified: isVerified,
-            status: currentStatus
+        records.forEach((record) => {
+            let currentRank = ''
+            let isVerified = ''
+            let currentStatus = ''
+            if (record.fields['Belt Rank']) { currentRank = record.fields['Belt Rank'] } else {currentRank = 'N/A'}
+            if (record.fields['Belt Rank Verified']) { isVerified = record.fields['Belt Rank Verified'] } else {isVerified = 'N/A'}
+            if (record.fields.Status) { currentStatus = record.fields.Status } else {currentStatus = 'N/A'}
+            studentsArr.push({
+                name: record.fields.Student,
+                recordId: record.id,
+                rank: currentRank,
+                isVerified: isVerified,
+                status: currentStatus,
+                school: record.fields['Gracie Barra Location'][0]
+            })
         })
-    })
 
+        fetchNextPage()
+
+    })
+    // console.log(records)
+    // console.log(studentsArr)
     return studentsArr
 }
 
@@ -102,4 +110,4 @@ const updateStatus = async function (id, status) {
 
 
 // exports
-export { getStudents, updateBeltRank, updateStatus}
+export { getStudents, updateBeltRank, updateStatus, getLocation}

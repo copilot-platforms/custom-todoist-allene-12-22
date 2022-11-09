@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { getStudents, updateBeltRank, updateStatus } from '../utils/airtable'
+import { getStudents, updateBeltRank, updateStatus, getLocation } from '../utils/airtable'
 
 
 /* 
@@ -35,6 +35,13 @@ function HomePage(props) {
     const router = useRouter()
     const refreshData = () => { router.replace(router.asPath) }
 
+    // RESET STATES FUNCTION
+    const reset = () => {
+        setRank('')
+        setStatus('')
+        setIsVerified('')
+    }
+
 
     const [selected, setSelected] = useState('') // SELECTED STUDENT STATE
     console.log('Selected: ' + selected)
@@ -46,21 +53,26 @@ function HomePage(props) {
 
     const [status, setStatus] = useState('') // SELECTED STUDENT STATUS (ACTIVE/SUSPENDED) STATE
 
+    const [location, setLocation] = useState('') // SELECTED LOCATION STATE
+    console.log('Location: ' + location)
+
 
     useEffect(() => {
         // CHECK IF STUDENT IS SELECTED AND SET STATE
         if (selected !== '' && selected !== 'select student') {
             let studentRecord = props.allStudents.filter(student => student.recordId === selected)
-            console.log(studentRecord[0])
+            // console.log(studentRecord[0])
             setRank(studentRecord[0].rank)
             setIsVerified(studentRecord[0].isVerified)
             setStatus(studentRecord[0].status)
-        } else if (selected === 'select student') {
-            setRank('')
-            setStatus('')
-            setIsVerified('')
+        } else if (selected === 'select student' || '') {
+            reset()
         }
     }, [selected]);
+
+
+
+
 
     // UPDATE RANK AND REFRESH DATA
     const handleUpdateRank = async function (id, verified) {
@@ -83,6 +95,24 @@ function HomePage(props) {
         } else { return null }
     }
 
+    // CONDITIONALLY DISPLAY STUDENT LIST BASED ON LOCATION
+    const getStudentsByLocation = () => {
+        let studentsByLocation = props.allStudents.filter(student => student.school === location)
+        return <div className='custom-select'>
+            <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
+                <option value="select student">Select Student</option>
+                {studentsByLocation.map((student) =>
+                    <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
+            </select>
+        </div>
+    }
+
+    // HANDLE LOCATION CHANGE AND CLEAR STUDENT DATA
+    const handleLocChange = (newLocation) => {
+        setLocation(newLocation)
+        reset()
+    }
+
 
     return (
         <>
@@ -92,14 +122,17 @@ function HomePage(props) {
                 </Head>
                 <div className='header'><h1>{props.clientName}</h1></div>
                 <div className='flex-container'>
-                    <div className='row'>Select Student:
+                    <div className='row'>Select Location:
                         <div className='custom-select'>
-                            <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
-                                <option value="select student">Select Student</option>
-                                {props.allStudents.map((student) =>
-                                    <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
+                            <select className="select-selected" onChange={e => { handleLocChange(e.target.value) }}>
+                                <option value="select location">Select Location</option>
+                                {props.allLocations.map((location) =>
+                                    <option key={location.recordId} value={location.recordId}>{location.schoolName}</option>)}
                             </select>
                         </div>
+                    </div>
+                    <div className='row'>Select Student:
+                        {getStudentsByLocation()}
                     </div>
                     <div className='row'>Current rank: <span className='input'>{rank}</span></div>
                     <div className='row'>Verified: <span className='input'>{isVerified}</span></div>
@@ -143,6 +176,9 @@ export async function getServerSideProps(context) {
     // SET PORTAL CLIENT ID FROM PARAMS
     clientId = context.query.clientId
 
+    // TEMP CLIENT ID FOR TESTING
+    // clientId = '7f999f5e-0b43-4598-97fc-0ccaac0136fe'
+
     // GET CLIENT OBJECT FROM clientId -> PORTAL API
     const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
     const clientData = await clientRes.json()
@@ -156,8 +192,8 @@ export async function getServerSideProps(context) {
 
 
     const allStudents = await getStudents(fullName) // Calls Airtable API to get all students matched on client name
-    // const location = await getLocation(fullName)
-    const sortStudents = allStudents.sort(function(a,b){
+    const allLocations = await getLocation(fullName)
+    const sortStudents = allStudents.sort(function (a, b) {
         let textA = a.name.toUpperCase()
         let textB = b.name.toUpperCase()
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
@@ -168,7 +204,8 @@ export async function getServerSideProps(context) {
     return {
         props: {
             clientName: fullName,
-            allStudents: sortStudents
+            allStudents: sortStudents,
+            allLocations
         }
     }
 }
