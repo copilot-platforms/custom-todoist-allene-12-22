@@ -34,6 +34,11 @@ const portalGetReq = {
 function HomePage(props) {
     const router = useRouter()
     const refreshData = () => { router.replace(router.asPath) }
+    const reset = () => {
+        setRank('')
+        setStatus('')
+        setIsVerified('')
+    }
 
 
     const [selected, setSelected] = useState('') // SELECTED STUDENT STATE
@@ -59,9 +64,7 @@ function HomePage(props) {
             setIsVerified(studentRecord[0].isVerified)
             setStatus(studentRecord[0].status)
         } else if (selected === 'select student' || '') {
-            setRank('')
-            setStatus('')
-            setIsVerified('')
+            reset()
         }
     }, [selected]);
 
@@ -100,10 +103,7 @@ function HomePage(props) {
 
     const handleLocChange = (newLocation) => {
         setLocation(newLocation)
-        setSelected('')
-        setRank('')
-        setStatus('')
-        setIsVerified('')
+        reset()
     }
 
 
