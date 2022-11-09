@@ -34,6 +34,8 @@ const portalGetReq = {
 function HomePage(props) {
     const router = useRouter()
     const refreshData = () => { router.replace(router.asPath) }
+
+    // RESET STATES
     const reset = () => {
         setRank('')
         setStatus('')
@@ -59,7 +61,7 @@ function HomePage(props) {
         // CHECK IF STUDENT IS SELECTED AND SET STATE
         if (selected !== '' && selected !== 'select student') {
             let studentRecord = props.allStudents.filter(student => student.recordId === selected)
-            console.log(studentRecord[0])
+            // console.log(studentRecord[0])
             setRank(studentRecord[0].rank)
             setIsVerified(studentRecord[0].isVerified)
             setStatus(studentRecord[0].status)
@@ -67,6 +69,10 @@ function HomePage(props) {
             reset()
         }
     }, [selected]);
+
+
+
+    
 
     // UPDATE RANK AND REFRESH DATA
     const handleUpdateRank = async function (id, verified) {
@@ -101,6 +107,7 @@ function HomePage(props) {
         </div>
     }
 
+    // HANDLE LOCATION CHANGE AND CLEAR STUDENT DATA
     const handleLocChange = (newLocation) => {
         setLocation(newLocation)
         reset()
@@ -117,7 +124,7 @@ function HomePage(props) {
                 <div className='flex-container'>
                     <div className='row'>Select Location:
                         <div className='custom-select'>
-                            <select className="select-selected" onChange={e => { handleLocChange(e.target.value)}}>
+                            <select className="select-selected" onChange={e => { handleLocChange(e.target.value) }}>
                                 <option value="select location">Select Location</option>
                                 {props.allLocations.map((location) =>
                                     <option key={location.recordId} value={location.recordId}>{location.schoolName}</option>)}
@@ -125,14 +132,7 @@ function HomePage(props) {
                         </div>
                     </div>
                     <div className='row'>Select Student:
-                    {getStudentsByLocation()}
-                        {/* <div className='custom-select'>
-                            <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
-                                <option value="select student">Select Student</option>
-                                {props.allStudents.map((student) =>
-                                    <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
-                            </select>
-                        </div> */}
+                        {getStudentsByLocation()}
                     </div>
                     <div className='row'>Current rank: <span className='input'>{rank}</span></div>
                     <div className='row'>Verified: <span className='input'>{isVerified}</span></div>
