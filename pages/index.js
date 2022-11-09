@@ -58,7 +58,7 @@ function HomePage(props) {
             setRank(studentRecord[0].rank)
             setIsVerified(studentRecord[0].isVerified)
             setStatus(studentRecord[0].status)
-        } else if (selected === 'select student') {
+        } else if (selected === 'select student' || '') {
             setRank('')
             setStatus('')
             setIsVerified('')
@@ -98,6 +98,14 @@ function HomePage(props) {
         </div>
     }
 
+    const handleLocChange = (newLocation) => {
+        setLocation(newLocation)
+        setSelected('')
+        setRank('')
+        setStatus('')
+        setIsVerified('')
+    }
+
 
     return (
         <>
@@ -109,7 +117,7 @@ function HomePage(props) {
                 <div className='flex-container'>
                     <div className='row'>Select Location:
                         <div className='custom-select'>
-                            <select className="select-selected" onChange={e => { setLocation(e.target.value) }}>
+                            <select className="select-selected" onChange={e => { handleLocChange(e.target.value)}}>
                                 <option value="select location">Select Location</option>
                                 {props.allLocations.map((location) =>
                                     <option key={location.recordId} value={location.recordId}>{location.schoolName}</option>)}
