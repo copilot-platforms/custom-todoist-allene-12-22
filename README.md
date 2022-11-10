@@ -6,7 +6,7 @@ This repo is a next.js app that uses the Copilot and Airtable APIs to populate d
 ## To run locally:
 - Run npm install
 - Run npm run dev
-- Access at localhost:3000
+- Access at localhost:3000/?clientId=<client id>
 
 ## Utils
 ### airtable.js
