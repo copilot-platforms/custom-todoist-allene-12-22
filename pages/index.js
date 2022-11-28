@@ -190,9 +190,12 @@ export async function getServerSideProps(context) {
     const companyData = await companyRes.json()
     console.log(companyData)
 
-    // CONSTRUCT FULL NAME
-    const fullName = "" //`${clientData.givenName} ${clientData.familyName}`
+    // CONSTRUCT SCHOOL OWNER NAME (CLIENTS)
+    //const fullName = "" //`${clientData.givenName} ${clientData.familyName}`
 
+    // CONSTRUCT SCHOOL NAME (COMPANIES)
+    const schoolName = companyData.name
+    console.log(schoolName)
 
 
     // -------------AIRTABLE API -------------------
