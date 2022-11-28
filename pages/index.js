@@ -13,6 +13,7 @@ import { getStudents, updateBeltRank, updateStatus, getLocation } from '../utils
 // VARIABLES
 let clientId;
 let companyId;
+let searchId;
 
 
 // HEADERS
@@ -172,37 +173,54 @@ export async function getServerSideProps(context) {
 
     // -------------PORTAL API-------------------
 
-    // CHECK PORTAL CLIENT ID FROM PARAMS
-
-    // SET PORTAL CLIENT OR COMPANY ID FROM PARAMS
-    clientId = context.query.clientId
-    companyId = context.query.companyId
-
     // TEMP CLIENT ID FOR TESTING
     // clientId = '7f999f5e-0b43-4598-97fc-0ccaac0136fe'
 
+    // SET PORTAL CLIENT OR COMPANY ID FROM PARAMS
+
+    clientId = context.query.clientId
+    console.log(`clientId: ${clientId}`)
+
+    companyId = context.query.companyId
+    console.log(`companyId: ${companyId}`)
+
+    if (clientId !== undefined) {
+        const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
+        const clientData = await clientRes.json()
+        console.log(clientData)
+        searchId = `${clientData.givenName} ${clientData.familyName}`
+    } else if (companyId !== undefined) {
+        const companyRes = await fetch(`https://api-beta.joinportal.com/v1/company/${companyId}`, portalGetReq)
+        const companyData = await companyRes.json()
+        console.log(companyData)
+        searchId = companyData.name
+    } else {
+        console.log('No ID Found')
+    }
+
+
     // GET CLIENT OBJECT FROM clientId -> PORTAL API
-    const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
-    const clientData = await clientRes.json()
+    // const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
+    // const clientData = await clientRes.json()
 
     // GET COMPANY OBJECT FROM clientId -> PORTAL API
-    const companyRes = await fetch(`https://api-beta.joinportal.com/v1/company/${companyId}`, portalGetReq)
-    const companyData = await companyRes.json()
-    console.log(companyData)
+    // const companyRes = await fetch(`https://api-beta.joinportal.com/v1/company/${companyId}`, portalGetReq)
+    // const companyData = await companyRes.json()
+    // console.log(companyData)
 
     // CONSTRUCT SCHOOL OWNER NAME (CLIENTS)
     //const fullName = "" //`${clientData.givenName} ${clientData.familyName}`
 
     // CONSTRUCT SCHOOL NAME (COMPANIES)
-    const schoolName = companyData.name
-    console.log(schoolName)
+    // const schoolName = companyData.name
+    console.log(`searchId: ${searchId}`)
 
 
     // -------------AIRTABLE API -------------------
 
 
-    const allStudents = await getStudents(fullName) // Calls Airtable API to get all students matched on client name
-    const allLocations = await getLocation(fullName)
+    const allStudents = await getStudents(searchId) // Calls Airtable API to get all students matched on client name
+    const allLocations = await getLocation(searchId)
     const sortStudents = allStudents.sort(function (a, b) {
         let textA = a.name.toUpperCase()
         let textB = b.name.toUpperCase()
@@ -213,7 +231,7 @@ export async function getServerSideProps(context) {
     // -----------PROPS-----------------------------
     return {
         props: {
-            clientName: fullName,
+            clientName: searchId,
             allStudents: sortStudents,
             allLocations
         }
