@@ -12,6 +12,7 @@ import { getStudents, updateBeltRank, updateStatus, getLocation } from '../utils
 
 // VARIABLES
 let clientId;
+let companyId;
 
 
 // HEADERS
@@ -173,8 +174,9 @@ export async function getServerSideProps(context) {
 
     // CHECK PORTAL CLIENT ID FROM PARAMS
 
-    // SET PORTAL CLIENT ID FROM PARAMS
+    // SET PORTAL CLIENT OR COMPANY ID FROM PARAMS
     clientId = context.query.clientId
+    companyId = context.query.companyId
 
     // TEMP CLIENT ID FOR TESTING
     // clientId = '7f999f5e-0b43-4598-97fc-0ccaac0136fe'
@@ -183,8 +185,13 @@ export async function getServerSideProps(context) {
     const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
     const clientData = await clientRes.json()
 
+    // GET COMPANY OBJECT FROM clientId -> PORTAL API
+    const companyRes = await fetch(`https://api-beta.joinportal.com/v1/company/${companyId}`, portalGetReq)
+    const companyData = await companyRes.json()
+    console.log(companyData)
+
     // CONSTRUCT FULL NAME
-    const fullName = `${clientData.givenName} ${clientData.familyName}`
+    const fullName = "" //`${clientData.givenName} ${clientData.familyName}`
 
 
 
