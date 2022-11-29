@@ -8,32 +8,37 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(gbBase.
 const studentsTable = base(gbTable.students.tableName)
 const locsTable = base(gbTable.locations.na.name)
 
+// init location
+// let location;
+
 /* 
     LOCATIONS API
 */
 
-const getLocation = async function (clientName) {
-    let locsArr = []
+// const getLocation = async function (clientName) {
+//     let locsArr = []
 
-    const records = await locsTable.select({
-        // Selecting the record with matching full name
-        maxRecords: 150,
-        view: "Grid view",
-        filterByFormula: `{School Owner} = "${clientName}"`
-    }).firstPage()
+//     const records = await locsTable.select({
+//         // Selecting the record with matching full name
+//         maxRecords: 150,
+//         view: "Grid view",
+//         filterByFormula: `{School Name} = "${clientName}"`
+//     }).firstPage()
 
 
     // console.log(records)
-    records.forEach((record) => {
+    // records.forEach((record) => {
+    //     location = record.id
+    //     console.log(location)
         // console.log(record.fields['School Name'])
-        locsArr.push({
-            schoolName: record.fields['School Name'],
-            recordId: record.id
-        })
-    })
+        // locsArr.push({
+        //     schoolName: record.fields['School Name'],
+        //     recordId: record.id
+        // })
+    // })
     // console.log(locsArr)
-    return locsArr
-}
+    // return locsArr
+// }
 
 
 
@@ -49,9 +54,9 @@ const getStudents = async function (clientName) {
 
     const records = await studentsTable.select({
         // Selecting the record with matching full name
-        // maxRecords: 150,
+        maxRecords: 150,
         view: "Grid view",
-        filterByFormula: `{School Owner (from Gracie Barra Location)} = "${clientName}"`
+        filterByFormula: `{Gracie Barra Location Text} = "${clientName}"`
     }).eachPage(function page(records, fetchNextPage){
 
         records.forEach((record) => {
@@ -74,8 +79,7 @@ const getStudents = async function (clientName) {
         fetchNextPage()
 
     })
-    // console.log(records)
-    // console.log(studentsArr)
+
     return studentsArr
 }
 
@@ -110,4 +114,4 @@ const updateStatus = async function (id, status) {
 
 
 // exports
-export { getStudents, updateBeltRank, updateStatus, getLocation}
+export { getStudents, updateBeltRank, updateStatus}
