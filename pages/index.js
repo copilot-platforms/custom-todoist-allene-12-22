@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { getStudents, updateBeltRank, updateStatus, getLocation } from '../utils/airtable'
+import { getStudents, updateBeltRank, updateStatus } from '../utils/airtable'
 
 
 /* 
@@ -12,6 +12,8 @@ import { getStudents, updateBeltRank, updateStatus, getLocation } from '../utils
 
 // VARIABLES
 let clientId;
+let companyId;
+let searchId;
 
 
 // HEADERS
@@ -95,24 +97,6 @@ function HomePage(props) {
         } else { return null }
     }
 
-    // CONDITIONALLY DISPLAY STUDENT LIST BASED ON LOCATION
-    const getStudentsByLocation = () => {
-        let studentsByLocation = props.allStudents.filter(student => student.school === location)
-        return <div className='custom-select'>
-            <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
-                <option value="select student">Select Student</option>
-                {studentsByLocation.map((student) =>
-                    <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
-            </select>
-        </div>
-    }
-
-    // HANDLE LOCATION CHANGE AND CLEAR STUDENT DATA
-    const handleLocChange = (newLocation) => {
-        setLocation(newLocation)
-        reset()
-    }
-
 
     return (
         <>
@@ -122,17 +106,14 @@ function HomePage(props) {
                 </Head>
                 <div className='header'><h1>{props.clientName}</h1></div>
                 <div className='flex-container'>
-                    <div className='row'>Select Location:
+                    <div className='row'>Select Student:
                         <div className='custom-select'>
-                            <select className="select-selected" onChange={e => { handleLocChange(e.target.value) }}>
-                                <option value="select location">Select Location</option>
-                                {props.allLocations.map((location) =>
-                                    <option key={location.recordId} value={location.recordId}>{location.schoolName}</option>)}
+                            <select className="select-selected" onChange={e => { setSelected(e.target.value) }}>
+                                <option value="select student">Select Student</option>
+                                {props.allStudents.map((student) =>
+                                    <option key={student.recordId} value={student.recordId}>{student.name}</option>)}
                             </select>
                         </div>
-                    </div>
-                    <div className='row'>Select Student:
-                        {getStudentsByLocation()}
                     </div>
                     <div className='row'>Current rank: <span className='input'>{rank}</span></div>
                     <div className='row'>Verified: <span className='input'>{isVerified}</span></div>
@@ -171,28 +152,36 @@ export async function getServerSideProps(context) {
 
     // -------------PORTAL API-------------------
 
-    // CHECK PORTAL CLIENT ID FROM PARAMS
-
-    // SET PORTAL CLIENT ID FROM PARAMS
-    clientId = context.query.clientId
-
     // TEMP CLIENT ID FOR TESTING
     // clientId = '7f999f5e-0b43-4598-97fc-0ccaac0136fe'
 
-    // GET CLIENT OBJECT FROM clientId -> PORTAL API
-    const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
-    const clientData = await clientRes.json()
+    // SET PORTAL CLIENT OR COMPANY ID FROM PARAMS
 
-    // CONSTRUCT FULL NAME
-    const fullName = `${clientData.givenName} ${clientData.familyName}`
+    clientId = context.query.clientId
+    console.log(`clientId: ${clientId}`)
 
+    companyId = context.query.companyId
+    console.log(`companyId: ${companyId}`)
+
+    if (clientId !== undefined) {
+        const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
+        const clientData = await clientRes.json()
+        searchId = `${clientData.givenName} ${clientData.familyName}`
+    } else if (companyId !== undefined) {
+        const companyRes = await fetch(`https://api-beta.joinportal.com/v1/company/${companyId}`, portalGetReq)
+        const companyData = await companyRes.json()
+        searchId = companyData.name
+    } else {
+        console.log('No ID Found')
+    }
+
+    console.log(`searchId: ${searchId}`)
 
 
     // -------------AIRTABLE API -------------------
 
 
-    const allStudents = await getStudents(fullName) // Calls Airtable API to get all students matched on client name
-    const allLocations = await getLocation(fullName)
+    const allStudents = await getStudents(searchId) // Calls Airtable API to get all students matched on client name
     const sortStudents = allStudents.sort(function (a, b) {
         let textA = a.name.toUpperCase()
         let textB = b.name.toUpperCase()
@@ -203,9 +192,8 @@ export async function getServerSideProps(context) {
     // -----------PROPS-----------------------------
     return {
         props: {
-            clientName: fullName,
+            clientName: searchId,
             allStudents: sortStudents,
-            allLocations
         }
     }
 }
