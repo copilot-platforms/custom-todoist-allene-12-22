@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import {getProjects} from '../utils/todoist'
+import { findProject, getProjectTasks, completeTask } from '../utils/todoist'
 
 /* 
 -------------GLOBALS-------------------
@@ -38,22 +38,29 @@ function HomePage(props) {
 
     // RESET STATES FUNCTION
     const reset = () => {
-        
+
     }
 
 
-    const [selected, setSelected] = useState('') // SELECTED STUDENT STATE
-    console.log('Selected: ' + selected)
+    const [tasks, setTasks] = useState([]) // SELECTED STUDENT STATE
+    console.log(tasks)
 
 
     useEffect(() => {
-        
-    }, [selected]);
+        setTasks(props.tasks)
+    }, []);
 
-    
+    const handleClick = (e) => {
+        let completedId = e.target.value
+        completeTask(completedId)
+        let newTasks = tasks.filter(task => task.id !== completedId)
+        setTasks(newTasks)
+    }
+
+
     // CONDITIONALLY DISPLAY 
-    const displayStatus = () => {
-        
+    const displayTasks = () => {
+        return tasks.map(task => <li><button key={task.id} value={task.id} onClick={(e) => handleClick(e)}>{task.content}</button></li>)
     }
 
 
@@ -63,8 +70,12 @@ function HomePage(props) {
                 <Head>
                     <title>Custom ToDoist</title>
                 </Head>
-                <div className='header'><h1>placeholder</h1></div>
+                <div className='header'><h1>{props.project.name}</h1></div>
                 <div className='flex-container'>
+                    {tasks.length > 0?<h2>Click to complete</h2> : <h2>All done!</h2>}
+                    <ul>
+                        {displayTasks()}
+                    </ul>
                 </div>
             </Container>
         </>
@@ -113,13 +124,17 @@ export async function getServerSideProps(context) {
     console.log(`searchId: ${searchId}`)
 
     //------    TODOIST ----------------------
-    let projects = await getProjects()
+    const project = await findProject()
+    const projectTasks = await getProjectTasks()
+    // console.log(`hiiii ${projectTasks}`)
+
 
 
     // -----------PROPS-----------------------------
     return {
         props: {
-            placeholder: 'placeholder'
+            project: project,
+            tasks: projectTasks
         }
     }
 }

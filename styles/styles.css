@@ -35,14 +35,6 @@ h1 {
    font-family: roboto;
 }
 
-.row {
-   padding: 1em;
-   font-weight: 600;
-}
-
-.input {
-   margin-left: 2em;
-}
 
 .header {
    width: auto;
@@ -50,10 +42,6 @@ h1 {
    text-align: center;
 }
 
-span {
-   float: right;
-   font-weight: 100;
-}
 
 .btn {
    text-align: center;
@@ -65,27 +53,6 @@ span {
    justify-content: space-evenly;
 }
 
-button {
-   border: none;
-   background-color: rgb(44, 101, 215);
-   border-radius: 8px;
-   color: white;
-   font-family: inherit;
-   padding: 0.4rem;
-   cursor: pointer;
-   font-size: large;
-}
-
-.custom-select {
-   float: right;
-}
-
-
-.select-selected {
-   background-color: rgb(44, 101, 215);
-   color: white;
-   border: none;
-   font-size: medium;
-   border-radius: 8px;
-   padding: 0.4rem;
+ul {
+   list-style-type: none;
 }
