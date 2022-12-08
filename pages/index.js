@@ -41,25 +41,39 @@ function HomePage(props) {
 
     }
 
-
+    const [selected, setSelected] = useState('')
+    const [project, setProject] = useState('')
+    console.log(`selected: ${selected}`)
     const [tasks, setTasks] = useState([]) // SELECTED STUDENT STATE
-    console.log(tasks)
+    // console.log(tasks)
 
 
     useEffect(() => {
-        setTasks(props.tasks)
-    }, []);
+        // CHECK IF project IS SELECTED AND SET STATE
+        if (selected !== '' && selected !== 'select project') {
+            let currentProject = props.projects.filter(project => project.id === selected)[0]
+            console.log(currentProject)
+            setProject(currentProject)
+            let projectTasks = props.tasks.filter(task => task.projectId === selected)
+            setTasks(projectTasks)
+        } else if (selected === 'select project' || '') {
+            reset()
+        }
+        refreshData()
+    }, [selected]);
+
 
     const handleClick = (e) => {
         let completedId = e.target.value
         completeTask(completedId)
         let newTasks = tasks.filter(task => task.id !== completedId)
+        // console.log(`newtskss!!! ${newTasks}`)
         setTasks(newTasks)
     }
 
-
     // CONDITIONALLY DISPLAY 
     const displayTasks = () => {
+        // let projectTasks = tasks.filter(task => task.projectId === selected)
         return tasks.map(task => <li><button key={task.id} value={task.id} onClick={(e) => handleClick(e)}>{task.content}</button></li>)
     }
 
@@ -70,9 +84,18 @@ function HomePage(props) {
                 <Head>
                     <title>Custom ToDoist</title>
                 </Head>
-                <div className='header'><h1>{props.project.name}</h1></div>
+                <div className='header'>{project.name? <h1>{project.name}</h1>: <h1>Select Project</h1>}</div>
+                <div className='row'>
+                    <div>
+                        <select onChange={e => { setSelected(e.target.value) }}>
+                            <option value="select project">Select Project</option>
+                            {props.projects.map((project) =>
+                                <option key={project.id} value={project.id}>{project.name}</option>)}
+                        </select>
+                    </div>
+                </div>
                 <div className='flex-container'>
-                    {tasks.length > 0?<h2>Click to complete</h2> : <h2>All done!</h2>}
+                    {tasks.length > 0 ? <h2>Click to complete</h2> : <h2>All done!</h2>}
                     <ul>
                         {displayTasks()}
                     </ul>
@@ -134,6 +157,7 @@ export async function getServerSideProps(context) {
     // -----------PROPS-----------------------------
     return {
         props: {
+            projects: projects,
             project: project,
             tasks: projectTasks
         }
