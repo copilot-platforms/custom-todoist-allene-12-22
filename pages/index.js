@@ -38,7 +38,8 @@ function HomePage(props) {
 
     // RESET STATES FUNCTION
     const reset = () => {
-
+        setTasks('')
+        setProject('')
     }
 
     const [selected, setSelected] = useState('')
@@ -49,11 +50,10 @@ function HomePage(props) {
 
 
     useEffect(() => {
-        // CHECK IF project IS SELECTED AND SET STATE
         if (selected !== '' && selected !== 'select project') {
             let currentProject = props.projects.filter(project => project.id === selected)[0]
-            console.log(currentProject)
             setProject(currentProject)
+
             let projectTasks = props.tasks.filter(task => task.projectId === selected)
             setTasks(projectTasks)
         } else if (selected === 'select project' || '') {
@@ -73,8 +73,9 @@ function HomePage(props) {
 
     // CONDITIONALLY DISPLAY 
     const displayTasks = () => {
-        // let projectTasks = tasks.filter(task => task.projectId === selected)
-        return tasks.map(task => <li><button key={task.id} value={task.id} onClick={(e) => handleClick(e)}>{task.content}</button></li>)
+        if (tasks.length > 0) {
+            return tasks.map(task => <li><button key={task.id} value={task.id} onClick={(e) => handleClick(e)}>{task.content}</button></li>)
+        }
     }
 
 
@@ -84,7 +85,7 @@ function HomePage(props) {
                 <Head>
                     <title>Custom ToDoist</title>
                 </Head>
-                <div className='header'>{project.name? <h1>{project.name}</h1>: <h1>Select Project</h1>}</div>
+                <div className='header'>{project.name ? <h1>{project.name}</h1> : <h1>Select Project</h1>}</div>
                 <div className='row'>
                     <div>
                         <select onChange={e => { setSelected(e.target.value) }}>
@@ -95,7 +96,7 @@ function HomePage(props) {
                     </div>
                 </div>
                 <div className='flex-container'>
-                    {tasks.length > 0 ? <h2>Click to complete</h2> : <h2>All done!</h2>}
+                    {tasks.length > 0 ? <h2>Click to complete</h2> : <h2>No tasks here!</h2>}
                     <ul>
                         {displayTasks()}
                     </ul>
