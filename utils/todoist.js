@@ -3,10 +3,16 @@ import { projectName } from "./constants"
 
 const api = new TodoistApi(process.env.TODO_API_KEY)
 let projectId = 'empty'
+let projectList = 'empty'
+
+export const listProjects = async function () {
+    projectList= await api.getProjects()
+    return projectList
+}
 
 export const findProject = async function () {
-    let allProjects = await api.getProjects()
-    let selectedProject =  allProjects.filter(project => project.name === projectName)[0]
+    // let allProjects = await api.getProjects()
+    let selectedProject =  projectList.filter(project => project.name === projectName)[0]
     projectId = selectedProject.id
     return selectedProject
 }

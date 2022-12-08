@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { findProject, getProjectTasks, completeTask } from '../utils/todoist'
+import { listProjects, findProject, getProjectTasks, completeTask } from '../utils/todoist'
 
 /* 
 -------------GLOBALS-------------------
@@ -124,6 +124,7 @@ export async function getServerSideProps(context) {
     console.log(`searchId: ${searchId}`)
 
     //------    TODOIST ----------------------
+    const projects = await listProjects()
     const project = await findProject()
     const projectTasks = await getProjectTasks()
     // console.log(`hiiii ${projectTasks}`)
