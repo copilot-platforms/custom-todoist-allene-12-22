@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-
+import {getProjects} from '../utils/todoist'
 
 /* 
 -------------GLOBALS-------------------
@@ -111,6 +111,10 @@ export async function getServerSideProps(context) {
     }
 
     console.log(`searchId: ${searchId}`)
+
+    //------    TODOIST ----------------------
+    let projects = await getProjects()
+
 
     // -----------PROPS-----------------------------
     return {
