@@ -149,7 +149,7 @@ export async function getServerSideProps(context) {
 
     //------    TODOIST ----------------------
     const projects = await listProjects()
-    const project = await findProject()
+    const project = await findProject(searchId)
     const projectTasks = await getProjectTasks()
     // console.log(`hiiii ${projectTasks}`)
 
