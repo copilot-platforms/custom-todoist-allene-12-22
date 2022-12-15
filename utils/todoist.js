@@ -26,3 +26,12 @@ export const getProjectTasks = async function (proj) {
 export const completeTask = async function(task) {
     await api.closeTask(task)
 }
+
+export const createTask = async function (obj) {
+    let res
+    await api.addTask({
+        content: obj.content,
+        projectId: obj.projectId
+    }).then((task) => res = task)
+    return res
+}

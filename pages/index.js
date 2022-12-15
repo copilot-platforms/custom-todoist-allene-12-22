@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { listProjects, findProject, getProjectTasks, completeTask } from '../utils/todoist'
+import { listProjects, findProject, getProjectTasks, completeTask, createTask } from '../utils/todoist'
 
 /* 
 -------------GLOBALS-------------------
@@ -37,29 +37,49 @@ function HomePage(props) {
     const refreshData = () => { router.replace(router.asPath) }
 
     const [tasks, setTasks] = useState([]) // SELECTED TASK STATE
+    const [newTask, setNewTask] = useState('')
     const project = props.project
 
-
     useEffect(() => {
-            let projectTasks = props.tasks.filter(task => task.projectId === project.id) // GET PROJECT TASKS BY ID
-            setTasks(projectTasks)
+        console.log(`PROP TASKS: ${props.tasks}`)
+        let projectTasks = props.tasks.filter(task => task.projectId === project.id) // GET PROJECT TASKS BY ID
+        setTasks(projectTasks)
         refreshData()
     }, []);
 
 
-    const handleClick = (e) => {
+    const removeTask = (e) => {
+        // console.log(e.target.value)
         let completedId = e.target.value
         completeTask(completedId)
         let newTasks = tasks.filter(task => task.id !== completedId)
         setTasks(newTasks)
     }
 
+    const handleChange = (e) => {
+        setNewTask(e.target.value)
+    }
+
+    const addTask = async function(e) {
+        e.preventDefault(e)
+        let newTaskObj = {
+            content: newTask,
+            projectId: project.id
+        }
+        await createTask(newTaskObj).then((res) => setTasks((prev) => ([
+            ...prev,
+            res
+        ])))
+        setNewTask('')
+        refreshData()
+    }
+
     // CONDITIONALLY DISPLAY 
     const displayTasks = () => {
         if (tasks.length > 0) {
-            return tasks.map(task => 
-            <li>
-                <button key={task.id} value={task.id} onClick={(e) => handleClick(e)}>{task.content}</button>
+            return tasks.map(task =>
+                <li key={task.id}>
+                    <button key={task.id} value={task.id} onClick={(e) => removeTask(e)}>{task.content}</button>
                 </li>)
         }
     }
@@ -78,6 +98,13 @@ function HomePage(props) {
                     <ul>
                         {displayTasks()}
                     </ul>
+                </div>
+                <div className='flex-container'>
+                    <form onSubmit={e => addTask(e)}>
+                        <label>Task:</label>
+                        <input type="text" id="newTask" name="newTask" value={newTask} onChange={handleChange} />
+                        <input type="submit" value="Add Task" placeholder='Add Task'/>
+                    </form>
                 </div>
             </Container>
         </>
@@ -129,6 +156,7 @@ export async function getServerSideProps(context) {
     const projects = await listProjects()
     const project = await findProject(searchId)
     const projectTasks = await getProjectTasks()
+    // const addTask = createTask
 
 
 
