@@ -10,9 +10,10 @@ export const listProjects = async function () {
     return projectList
 }
 
-export const findProject = async function () {
-    let selectedProject =  projectList.filter(project => project.name === projectName)[0]
+export const findProject = async function (clientName) {
+    let selectedProject =  projectList.filter(project => project.name === clientName)[0]
     projectId = selectedProject.id
+    console.log(selectedProject)
     return selectedProject
 }
 
