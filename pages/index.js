@@ -13,7 +13,6 @@ import { listProjects, findProject, getProjectTasks, completeTask, createTask } 
 let clientId;
 let companyId;
 let searchId;
-let pageId;
 
 
 // HEADERS
@@ -46,7 +45,6 @@ function HomePage(props) {
         setTasks(projectTasks)
         refreshData()
     }, []);
-    console.log(`page id: ${props.pageId}`)
 
 
     const removeTask = (e) => {
@@ -143,12 +141,10 @@ export async function getServerSideProps(context) {
         const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
         const clientData = await clientRes.json()
         searchId = `${clientData.givenName} ${clientData.familyName}`
-        pageId = clientId
     } else if (companyId !== undefined) {
         const companyRes = await fetch(`https://api-beta.joinportal.com/v1/company/${companyId}`, portalGetReq)
         const companyData = await companyRes.json()
         searchId = companyData.name
-        pageId = companyId
     } else {
         console.log('No ID Found')
     }
@@ -168,8 +164,7 @@ export async function getServerSideProps(context) {
         props: {
             projects: projects,
             project: project,
-            tasks: projectTasks,
-            pageId: pageId
+            tasks: projectTasks
         }
     }
 }
