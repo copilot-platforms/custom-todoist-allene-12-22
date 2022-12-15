@@ -33,14 +33,13 @@ const portalGetReq = {
 
 function HomePage(props) {
     const router = useRouter()
-    const refreshData = () => { router.replace(router.asPath, '', {scroll:false}) }
+    const refreshData = () => { router.replace(router.asPath, '', { scroll: false }) } // REFRESH PROPS WITHOUT SCROLLING
 
     const [tasks, setTasks] = useState([]) // SELECTED TASK STATE
-    const [newTask, setNewTask] = useState('')
-    const project = props.project
+    const [newTask, setNewTask] = useState('') // NEW TASK STATE
+    const project = props.project // PROJECT MATCHED ON PAGE ID
 
     useEffect(() => {
-        console.log(`PROP TASKS: ${props.tasks}`)
         let projectTasks = props.tasks.filter(task => task.projectId === project.id) // GET PROJECT TASKS BY ID
         setTasks(projectTasks)
         refreshData()
@@ -48,8 +47,7 @@ function HomePage(props) {
 
 
     const removeTask = (e) => {
-        // console.log(e.target.value)
-        let completedId = e.target.value
+        let completedId = e.target.value  // ID OF CLICKED TASK
         completeTask(completedId)
         let newTasks = tasks.filter(task => task.id !== completedId)
         setTasks(newTasks)
@@ -59,12 +57,14 @@ function HomePage(props) {
         setNewTask(e.target.value)
     }
 
-    const addTask = async function(e) {
+    const addTask = async function (e) {
         e.preventDefault(e)
+        // CREATE TASK OBJECT TO PASS TO API POST
         let newTaskObj = {
             content: newTask,
             projectId: project.id
         }
+        // POST TASK OBJECT AND RETRIEVE UPDATED TASKS
         await createTask(newTaskObj).then((res) => setTasks((prev) => ([
             ...prev,
             res
@@ -73,7 +73,7 @@ function HomePage(props) {
         refreshData()
     }
 
-    // CONDITIONALLY DISPLAY 
+    // CONDITIONALLY DISPLAY TASKS
     const displayTasks = () => {
         if (tasks.length > 0) {
             return tasks.map(task =>
@@ -102,7 +102,7 @@ function HomePage(props) {
                     <form onSubmit={e => addTask(e)}>
                         <label>Task:</label>
                         <input type="text" id="newTask" name="newTask" value={newTask} onChange={handleChange} />
-                        <input type="submit" value="Add Task" placeholder='Add Task'/>
+                        <input type="submit" value="Add Task" placeholder='Add Task' />
                     </form>
                 </div>
             </Container>
@@ -155,7 +155,6 @@ export async function getServerSideProps(context) {
     const projects = await listProjects()
     const project = await findProject(searchId)
     const projectTasks = await getProjectTasks()
-    // const addTask = createTask
 
 
 
