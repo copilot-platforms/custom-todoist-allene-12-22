@@ -3,7 +3,7 @@ import Container from '../Components/container'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { listProjects, findProject, getProjectTasks, completeTask } from '../utils/todoist'
+import { listProjects, findProject, getProjectTasks, completeTask, createTask } from '../utils/todoist'
 
 /* 
 -------------GLOBALS-------------------
@@ -38,11 +38,16 @@ function HomePage(props) {
 
     const [tasks, setTasks] = useState([]) // SELECTED TASK STATE
     const project = props.project
+    let testObj = {
+        content: "test",
+        projectId: '2304110292'
+    }
 
-
+    
     useEffect(() => {
             let projectTasks = props.tasks.filter(task => task.projectId === project.id) // GET PROJECT TASKS BY ID
             setTasks(projectTasks)
+            createTask(testObj)
         refreshData()
     }, []);
 
@@ -129,6 +134,7 @@ export async function getServerSideProps(context) {
     const projects = await listProjects()
     const project = await findProject(searchId)
     const projectTasks = await getProjectTasks()
+    // const addTask = createTask
 
 
 
@@ -137,7 +143,8 @@ export async function getServerSideProps(context) {
         props: {
             projects: projects,
             project: project,
-            tasks: projectTasks
+            tasks: projectTasks,
+            // addTask: addTask
         }
     }
 }
