@@ -46,19 +46,12 @@ function HomePage(props) {
     const [project, setProject] = useState('')
     console.log(`selected: ${selected}`)
     const [tasks, setTasks] = useState([]) // SELECTED STUDENT STATE
-    // console.log(tasks)
+    console.log(`CLIENT PROJECT: ${props.project}`)
 
 
     useEffect(() => {
-        if (selected !== '' && selected !== 'select project') {
-            let currentProject = props.projects.filter(project => project.id === selected)[0]
-            setProject(currentProject)
-
-            let projectTasks = props.tasks.filter(task => task.projectId === selected)
+            let projectTasks = props.tasks.filter(task => task.projectId === props.project.id)
             setTasks(projectTasks)
-        } else if (selected === 'select project' || '') {
-            reset()
-        }
         refreshData()
     }, [selected]);
 
