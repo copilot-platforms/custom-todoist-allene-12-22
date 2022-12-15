@@ -27,14 +27,13 @@ const portalGetReq = {
 
 
 
-
 /* 
 -------------APP------------------- 
 */
 
 function HomePage(props) {
     const router = useRouter()
-    const refreshData = () => { router.replace(router.asPath) }
+    const refreshData = () => { router.replace(router.asPath, '', {scroll:false}) }
 
     const [tasks, setTasks] = useState([]) // SELECTED TASK STATE
     const [newTask, setNewTask] = useState('')
