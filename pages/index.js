@@ -100,7 +100,7 @@ function HomePage(props) {
                 </div>
                 <div className='flex-container'>
                     <form onSubmit={e => addTask(e)}>
-                        <label>Task:</label>
+                        <label>Task: </label>
                         <input type="text" id="newTask" name="newTask" value={newTask} onChange={handleChange} />
                         <input type="submit" value="Add Task" placeholder='Add Task' />
                     </form>
@@ -127,15 +127,15 @@ export async function getServerSideProps(context) {
     // -------------PORTAL API-------------------
 
     // TEMP CLIENT ID FOR TESTING
-    // clientId = '7f999f5e-0b43-4598-97fc-0ccaac0136fe'
+    clientId = process.env.COPILOT_CLIENT_ID
 
     // SET PORTAL CLIENT OR COMPANY ID FROM PARAMS
 
-    clientId = context.query.clientId
-    console.log(`clientId: ${clientId}`)
+    // clientId = context.query.clientId
+    // console.log(`clientId: ${clientId}`)
 
-    companyId = context.query.companyId
-    console.log(`companyId: ${companyId}`)
+    // companyId = context.query.companyId
+    // console.log(`companyId: ${companyId}`)
 
     if (clientId !== undefined) {
         const clientRes = await fetch(`https://api-beta.joinportal.com/v1/client/${clientId}`, portalGetReq)
